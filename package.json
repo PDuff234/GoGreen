@@ -1,18 +1,26 @@
 {
+  "name": "gogreen",
+  "version": "1.0.0",
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "eject": "expo eject"
+  },
   "dependencies": {
     "@react-google-maps/api": "^2.7.0",
     "@react-navigation/bottom-tabs": "^6.2.0",
     "@react-navigation/native-stack": "^6.9.1",
-    "expo": "^46.0.16",
-    "expo-image-picker": "~13.3.1",
+    "expo": "~44.0.0",
     "expo-status-bar": "~1.2.0",
-    "react": "^18.2.0",
+    "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-google-maps": "^9.4.5",
     "react-hook-form": "^7.28.1",
-    "react-native": "^0.70.4",
+    "react-native": "0.64.3",
     "react-native-draggable-flatlist": "^3.1.2",
-    "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "~2.1.0",
     "react-native-modal": "^13.0.1",
     "react-native-reanimated": "~2.3.1",
@@ -22,7 +30,10 @@
     "react-native-web": "0.17.1",
     "react-navigation": "^4.4.4",
     "react-navigation-stack": "^2.10.4",
-    "react-navigation-tabs": "^2.11.2",
-    "react-redux": "^8.0.4"
+    "react-navigation-tabs": "^2.11.2"
   },
+  "devDependencies": {
+    "@babel/core": "^7.12.9"
+  },
+  "private": true
 }

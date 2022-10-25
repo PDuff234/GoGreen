@@ -24,7 +24,19 @@ const Home = () => {
 
 return (
     <View style={{ flex: 1, padding: 24 }}>
-      
+      {isLoading ? <Text>Loading...</Text> : 
+      ( <View style={{ flex: 1, flexDirection: 'column', justifyContent:  'space-between'}}>
+          <Text style={{ fontSize: 18, color: 'green', textAlign: 'center', padding: 10}}>Street Vendors Near Me!</Text>
+		  <Text style={{ fontSize: 18, color: 'green', textAlign: 'center', padding: 10}}>{temp}</Text>
+          <FlatList
+            //data={data}
+            keyExtractor={({ id }, index) => id}
+            renderItem={({ data }) => (
+              <Text>{data}</Text>
+            )}
+          />
+        </View>
+      )}
     </View>
   );
 };
