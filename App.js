@@ -30,7 +30,7 @@ Home: {
 		);
 	},
 	},
-},
+}, 
 User: {
 	screen: UserScreen,
 	navigationOptions: {
