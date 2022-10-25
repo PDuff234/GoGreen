@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Go Green",
-    "slug": "Go-Green",
+    "slug": "gogreen",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
