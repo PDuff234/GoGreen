@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, Image } from "react-native";
 import { Camera } from "expo-camera";
 import * as ImagePicker from 'expo-image-picker';
-import CameraUpload from "./CameraUpload";
 
 export default function CameraSnap() {
   const [hasPermission, setHasPermission] = useState(null);
@@ -150,18 +149,12 @@ export default function CameraSnap() {
                   alignItems: "center",
                 }}
               >
-                <TouchableOpacity
-                  onPress={takePicture}
-                  style={{
-                    width: 70,
-                    height: 70,
-                    bottom: 0,
-                    borderRadius: 50,
-                    backgroundColor: "#fff",
-                  }}
-                />
-                <TouchableOpacity style = {styles.button} onPress = {pickImage}>
-                  <Image source={require("../assets/Upload.png")}/>
+                <TouchableOpacity onPress={takePicture}> 
+                    <Image style={styles.snap} source = {require('../assets/Camera.png')}/>
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress = {pickImage}>
+                  <Image style = {styles.button} source={require('../assets/Upload.png')}/>
                 </TouchableOpacity>
               </View>
             </View>
@@ -180,14 +173,18 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
     },
     button: {
-      backgroundColor: '#859a9b',
-      flex: 1, 
-      borderRadius: 20,
+      backgroundColor: 'transparent',
+      width: 25, 
+      height: 25, 
+      left: 100, 
+      top: -50, 
       padding: 10,
-      marginBottom: 20,
-      shadowColor: '#303838',
-      shadowOffset: { width: 0, height: 5 },
-      shadowRadius: 10,
-      shadowOpacity: 0.35,
     },
+    snap: {
+        backgroundColor: 'transparent', 
+        width: 70,
+        height: 70,
+        bottom: 0,
+        borderRadius: 50,
+    }
   });
