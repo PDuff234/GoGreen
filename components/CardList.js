@@ -26,7 +26,7 @@ const CardList = ({ items, onDragDrop, navigation }) => {
   const { currentSelected } = state;
 
   const renderItem = ({item, drag, isActive}) => {
-    const {image, name, material, id} = item;
+    const {id, name, material, url} = item;
     const isChecked = state.currentSelected === id ? true : false;
     
 		return(
@@ -37,11 +37,11 @@ const CardList = ({ items, onDragDrop, navigation }) => {
 					disabled={isActive}
 				>
 					<Card 
-            imageSrc={image}
+            id={id}
+            imageSrc={url}
             cardTitle={name}
             materialName={material}
             selected={isChecked}
-            id={id}
             onPress={handleRadioClick}
           />
 				</TouchableOpacity>

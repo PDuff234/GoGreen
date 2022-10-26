@@ -1,23 +1,44 @@
-import { React, } from 'react';
+import { React, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Image, Dimensions} from "react-native";
 
 import RadioButton from './RadioButton';
+import { storage } from '../firebaseConfig';
+
+import * as firebase from 'firebase/storage';
+
+
 
 const windowWidth = Dimensions.get('window').width;
 
 const Card = (props) => {
-  const { imgSrc, cardTitle, materialName, selected, id, onPress } = props;
+  const {  id, imageSrc, cardTitle, materialName, selected, onPress } = props;
+  const [state, setState] = useState({
+    uri: null
+  })
 
+  useEffect( () => {
+    async function fetchDownloadUrl() {
+      const ref = firebase.ref(storage, imageSrc);
+      const uri = await firebase.getDownloadURL(ref);  
+      setState({uri})
+    }
+    fetchDownloadUrl();
+  }, [])
+
+  const { uri } = state;
   return(
+
     <View style={styles.cardContainer}>
+      {true ?
       <View style={styles.content}>
-        <Image style={styles.image} source={imgSrc}></Image>
+        <Image style={styles.image} source={{uri}}></Image>
         <View>
           <Text style={styles.title} numberOfLines={1}>{cardTitle}</Text>
           <Text style={styles.subtitle}>{materialName}</Text>
         </View>
         <RadioButton id={id} onPress={onPress} isChecked={selected}  />
-      </View>
+      </View> : 
+      null}
     </View>
   );
 }
