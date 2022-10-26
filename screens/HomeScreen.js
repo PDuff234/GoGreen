@@ -14,13 +14,13 @@ const Home = () => {
 
 	var temp = JSON.stringify(data); 
 
-	useEffect(() => {
-		fetch('http://54.174.101.94:5000/getallfoodtrucks') 
-		.then((response) => response.json())
-		.then((json) =>{ setData(json)})
-		.catch((error) => console.error(error))
-		.finally(() => setLoading(false)); 
-	}, []); 
+	// useEffect(() => {
+	// 	fetch('http://54.174.101.94:5000/getallfoodtrucks') 
+	// 	.then((response) => response.json())
+	// 	.then((json) =>{ setData(json)})
+	// 	.catch((error) => console.error(error))
+	// 	.finally(() => setLoading(false)); 
+	// }, []); 
 
 return (
     <View style={{ flex: 1, padding: 24 }}>
