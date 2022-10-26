@@ -4,7 +4,7 @@ import { ActivityIndicator, FlatList, Text, View, Image, SafeAreaView, ScrollVie
 import CameraUpload from "../components/CameraUpload"
 import CameraSnap from "../components/CameraSnap";
 
-const Home = () => {
+const CameraScreen = () => {
 return (
     <View style={{ flex: 1, padding: 24 }}>
 		<CameraSnap></CameraSnap>
@@ -12,4 +12,4 @@ return (
   );
 };
 
-export default Home;
+export default CameraScreen;
