@@ -3,7 +3,10 @@ import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, Image } from
 import { Camera } from "expo-camera";
 import * as ImagePicker from 'expo-image-picker';
 
-export default function CameraSnap() {
+import { storage } from "../firebaseConfig";
+import { ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
+
+export default function CameraSnap({ onSnap }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
@@ -30,7 +33,15 @@ export default function CameraSnap() {
     let photo = await camera.takePictureAsync();
     setPreviewVisible(true);
     setCapturedImage(photo);
-    console.log(photo); 
+    console.log(photo.uri); 
+
+    const response = await fetch(photo.uri);
+    const blob = await response.blob();
+
+    const storageRef = ref(storage, 'test/test-image.jpg');
+    await uploadBytesResumable(storageRef, blob).then( () => {
+      console.log("Success");
+    } );
   };
 
   const pickImage = async () => {
