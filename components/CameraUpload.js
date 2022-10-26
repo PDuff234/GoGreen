@@ -5,7 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { ButtonGroup, Card } from 'react-native-elements'; 
 
 
-const Camera = () => {
+const CameraUpload = () => {
   const [image,setImage]=useState(null)
 
   const pickImage = async () => {
@@ -19,31 +19,6 @@ const Camera = () => {
       setImage(result.uri);
     }
   };
-
-  const ButtonGroupModeSelection = ({ updateIndex, inputModeIndex }) => {
-    return (
-        <ButtonGroup
-            selectedTextStyle = {{ color: 'white' }}
-            selectedButtonStyle = {{backgroundColor: '#30518e'}}
-            onPress = {updateIndex}
-            selectedIndex = {inputModeIndex}
-            buttons = {['Snap Photo', 'Upload Photo']}
-            containerStyle = {{ height: 40, width: 370, margin: 0, padding: 0 }}
-        />
-    );
-  };
-
-  interface Props {
-    foundMaterials?: object[];
-  }
-  
-  interface State {
-    hasCameraPermission: boolean | undefined;
-    type: string;
-    image: string;
-    loading: boolean;
-    inputModeIndex: number;
-  }
 
   return (
     <View style={styles.container}>
@@ -64,4 +39,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Camera; 
+export default CameraUpload; 
