@@ -1,5 +1,4 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
@@ -122,7 +121,6 @@ Profile: {
 		},
 	},
 },
-
 });
 
 const Navigator = createAppContainer(TabNavigator);
@@ -135,10 +133,3 @@ export default function App() {
 		</Navigator>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-	  backgroundColor: '#i35631',
-	  width: 500, 
-	},
-  });
