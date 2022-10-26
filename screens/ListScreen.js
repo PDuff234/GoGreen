@@ -18,14 +18,8 @@ const ListScreen = ({ navigation }) => {
       const querySnapshot = await getDocs(collection(db, "UserData", "TestUser", "Recyclables"));
       const data = [];
       querySnapshot.forEach(async (doc) => {
-        // console.log(`${doc.id} => ${doc.data()}`);
         data.push(doc.data());
       });
-      // setState({data: querySnapshot.docs[0].data().url})
-      // const storage = firebase.getStorage(app)
-      // const ref = firebase.ref(storage, "gs://gogreen-366404.appspot.com/test/plastic4.jpg");
-      // const url = await firebase.getDownloadURL(ref);
-      // setState({url})
       setState({isCardSelected: false, data});
     }
     fetchData();
@@ -42,9 +36,6 @@ const ListScreen = ({ navigation }) => {
   return(
     <SafeAreaView style={{flex:1}}>
 			{ data ? <CardList items={data} onDragDrop={handleDragEnd} navigation={navigation} /> : null }
-      {/* <Text>{state.url}</Text>
-      <Image style={{height: 200, width: 200}} source={{uri: state.url}}></Image>
-      { state.url ? <View><Image source={{uri: state.url}}></Image></View> : null } */}
     </SafeAreaView>
 
   )
