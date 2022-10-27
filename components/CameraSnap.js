@@ -55,6 +55,14 @@ export default function CameraSnap({ onSnap }) {
       setPreviewVisible(true); 
       setCapturedImage(result); 
       console.log(result); 
+
+      const response = await fetch(result.uri);
+      const blob = await response.blob();
+  
+      const storageRef = ref(storage, 'test/test-image.jpg');
+      await uploadBytesResumable(storageRef, blob).then( () => {
+        console.log("Success");
+      });
     }
   };
 
