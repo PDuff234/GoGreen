@@ -11,8 +11,7 @@ import MapScreen from "./screens/MapScreen";
 import MapDisplay from "./screens/Map"; 
 import ListScreen from "./screens/ListScreen";
 import CameraScreen from "./screens/CameraScreen";
-import { Camera } from "expo-camera";
-
+import HomeScreen from "./screens/HomeScreen";
 
 const ListStack = createStackNavigator({
 	List: ListScreen,
@@ -30,7 +29,7 @@ const ListStack = createStackNavigator({
 
 const TabNavigator = createBottomTabNavigator({
 Home: {
-	screen: CameraScreen,
+	screen: HomeScreen,
 	navigationOptions: {
 		tabBarLabel: "Home",
 		tabBarOptions: {
