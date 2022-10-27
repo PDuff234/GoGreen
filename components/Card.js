@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     height: 80,
     borderWidth: 2,
     borderRadius: 10,
-    borderColor: '#154C8A',
+    borderColor: '#006600',
   },
   content: {
     flex: 1,
@@ -64,17 +64,17 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 10,
-    borderColor:'#154C8A',
+    borderColor:'#006600',
   },
   title: {
     width: 200,
     fontSize: 25,
-    color: '#154C8A',
+    color: '#006600',
   },
 
   subtitle: {
     fontSize: 15,
-    color: '#154C8A',
+    color: '#006600',
   }
 });
 

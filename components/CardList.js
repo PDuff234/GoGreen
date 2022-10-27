@@ -64,7 +64,7 @@ const CardList = ({ items, onDragDrop, navigation }) => {
           <View style={styles.mapNavigation}>
             <Button 
               title='Go to map' 
-              color={'#154C8A'}
+              color={'#006600'}
               onPress={() => navigation.navigate('Map')}
             />
           </View>: null}
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     bottom: 50,
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: '#154C8A',
+    borderColor: '#006600',
   },
 })
 

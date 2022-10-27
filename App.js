@@ -20,7 +20,7 @@ const ListStack = createStackNavigator({
 	,{
 		defaultNavigationOptions: {
 			headerStyle: {
-				backgroundColor: '#154C8A',
+				backgroundColor: '#006600',
 			}, 
 			headerTitleStyle: {
 				color: "#fff"
