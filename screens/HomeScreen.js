@@ -6,14 +6,14 @@ const HomeScreen = () => {
 
     let proTips = [
         'Pro Tip #1: Flip it over! Check it out before you chuck it out!',
-        'Pro Tip #2: Save the Earth! Its the only planet with Chocolate. So far…. (edited)',
+        'Pro Tip #2: Save the Earth! Its the only planet with Chocolate. ',
         'Pro Tip #3: Follow the Three R\'s: Reduce, Reuse, Recycle.',
         'Pro Tip #4: Flip it over! Check it out before you chuck it out!',
-        'Pro Tip #5: Save the Earth! Its the only planet with Chocolate. So far…. (edited)',
-        'Pro Tip #6: Don’t be trashy! Recycle!', 
+        'Pro Tip #5: Save the Earth! Make the Turtles proud!',
+        'Pro Tip #6: Don’t be trashy! Be Flashy and Recycle!', 
         'Pro Tip #7: Recycling plastic feels fantastic!', 
         'Pro Tip #8: It’s easy being green- Reduce, Reuse, Recycle.',
-        'Pro Tip #9: You will produce about 127, 604 pounds of garbage in your lifetime. Recycle.',
+        'Pro Tip #9: You will produce about 127 to 604 pounds of garbage in your lifetime.',
         'Pro Tip #10: Have you hugged your recycling bin today?']
       
       const randoNum = () => {
