@@ -24,25 +24,23 @@ const Results = ({ searchParams }) => {
     getResults();
   }, [])
 
-  
-
   const handlePress = async (e) => {
-    const { latitude, longitude } = e.nativeEvent.coordinate
+    const { latitude, longitude } = e.nativeEvent.coordinate;
 
-    const latlngD = `${latitude},${longitude}`
-    const latlngO = `${searchParams.geolocation.latitude},${searchParams.geolocation.longitude}`
+    const latlngD = `${latitude},${longitude}`;
+    const latlngO = `${searchParams.geolocation.latitude},${searchParams.geolocation.longitude}`;
   
-    const responseDestination = await fetch(`${GOOGLE_MAPS_GEOENCODE_ENDPOINT}?latlng=${latlngD}&key=${googleMapsApiKey}`)
+    const responseDestination = await fetch(`${GOOGLE_MAPS_GEOENCODE_ENDPOINT}?latlng=${latlngD}&key=${googleMapsApiKey}`);
     const parsedDestination = await responseDestination.json();
     const destId = parsedDestination.results[0].place_id;
 
-    const responseOrigin = await fetch(`${GOOGLE_MAPS_GEOENCODE_ENDPOINT}?latlng=${latlngO}&key=${googleMapsApiKey}`)
+    const responseOrigin = await fetch(`${GOOGLE_MAPS_GEOENCODE_ENDPOINT}?latlng=${latlngO}&key=${googleMapsApiKey}`);
     const parsedOrigin = await responseOrigin.json();
     const originId = parsedOrigin.results[0].place_id;
 
-    const parameters = `origin=${latlngO}\&origin_place_id:${originId}&destination=${latlngD}&destination_place_id:${destId}`
+    const parameters = `origin=${latlngO}\&origin_place_id:${originId}&destination=${latlngD}&destination_place_id:${destId}`;
     
-    Linking.openURL(`https://www.google.com/maps/dir/?api=1&${parameters}`)
+    Linking.openURL(`https://www.google.com/maps/dir/?api=1&${parameters}`);
  
   }
 

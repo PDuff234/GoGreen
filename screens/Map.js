@@ -32,7 +32,7 @@ const Map = ({ label }) => {
       searchParams.geolocation = { 
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-       }
+       };
       
     }
     getPermissions();
@@ -43,7 +43,7 @@ const Map = ({ label }) => {
       <View style={styles.mapContainer}>
         <Text>{errorMsg}</Text>
       </View>
-    )
+    );
   }
 
 
@@ -79,7 +79,7 @@ const Map = ({ label }) => {
         </MapView> 
       }
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
