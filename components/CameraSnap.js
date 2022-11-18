@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, Image } from "react-native";
 import { Camera } from "expo-camera";
 import * as ImagePicker from 'expo-image-picker';
-
 import { storage } from "../firebaseConfig";
 import { ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
+import * as ImageManipulator from "expo-image-manipulator";
 
 export default function CameraSnap({ onSnap }) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -35,10 +35,15 @@ export default function CameraSnap({ onSnap }) {
     setCapturedImage(photo);
     console.log(photo.uri); 
 
-    const response = await fetch(photo.uri);
+    const manipulateResult = await ImageManipulator.manipulateAsync(
+      photo.uri, 
+      [{ resize: {width: 640, height: 480} }], 
+      { format: 'jpeg' }
+    ); 
+    const response = await fetch(manipulateResult.uri);
     const blob = await response.blob();
 
-    const storageRef = ref(storage, 'test/test-image.jpg');
+    const storageRef = ref(storage, 'test/test-image.jpeg');
     await uploadBytesResumable(storageRef, blob).then( () => {
       console.log("Success");
     } );
@@ -51,15 +56,23 @@ export default function CameraSnap({ onSnap }) {
       quality: 1,
       allowsEditing:true
     });
-    if (!result.cancelled) {
+    if (!result.canceled) {
       setPreviewVisible(true); 
       setCapturedImage(result); 
       console.log(result); 
 
-      const response = await fetch(result.uri);
+      const manipulateResult = await ImageManipulator.manipulateAsync(
+        result.uri, 
+        [{ resize: {width: 640, height: 480} }], 
+        { format: 'jpeg' }
+      ); 
+
+      console.log(manipulateResult); 
+      
+      const response = await fetch(manipulateResult.uri);
       const blob = await response.blob();
   
-      const storageRef = ref(storage, 'test/test-image.jpg');
+      const storageRef = ref(storage, 'test/test-image.jpeg');
       await uploadBytesResumable(storageRef, blob).then( () => {
         console.log("Success");
       });

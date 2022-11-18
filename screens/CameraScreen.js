@@ -1,7 +1,7 @@
 import React, {useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Text, View, Image, SafeAreaView, ScrollView, StyleSheet, Modal } from "react-native";
 
-import CameraUpload from "../components/CameraUpload"
+//import CameraUpload from "../components/CameraUpload"
 import CameraSnap from "../components/CameraSnap";
 
 const CameraScreen = () => {
