@@ -7,8 +7,7 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-gesture-handler'; 
 
 import UserScreen from "./screens/UserScreen";
-import MapScreen from "./screens/MapScreen";
-import MapDisplay from "./screens/Map"; 
+import MapScreen from "./screens/Map"; 
 import ListScreen from "./screens/ListScreen";
 import CameraScreen from "./screens/CameraScreen";
 import HomeScreen from "./screens/HomeScreen";
@@ -27,6 +26,8 @@ const ListStack = createStackNavigator({
 			},
 		}
 });
+
+
 
 const TabNavigator = createBottomTabNavigator({
 Home: {
@@ -48,7 +49,7 @@ Home: {
 	},
 },
 Location: {
-	screen: MapDisplay,
+	screen: MapScreen,
 	navigationOptions: {
 		tabBarLabel: "Location",
 		tabBarOptions: {
