@@ -38,12 +38,12 @@ export default function CameraSnap({ onSnap }) {
     const manipulateResult = await ImageManipulator.manipulateAsync(
       photo.uri, 
       [{ resize: {width: 640, height: 480} }], 
-      { format: 'jpg' }
+      { format: 'jpeg' }
     ); 
     const response = await fetch(manipulateResult.uri);
     const blob = await response.blob();
 
-    const storageRef = ref(storage, 'test/test-image.jpg');
+    const storageRef = ref(storage, 'test/test-image.jpeg');
     await uploadBytesResumable(storageRef, blob).then( () => {
       console.log("Success");
     } );
@@ -56,21 +56,23 @@ export default function CameraSnap({ onSnap }) {
       quality: 1,
       allowsEditing:true
     });
-    if (!result.cancelled) {
+    if (!result.canceled) {
       setPreviewVisible(true); 
       setCapturedImage(result); 
       console.log(result); 
 
       const manipulateResult = await ImageManipulator.manipulateAsync(
-        photo.uri, 
+        result.uri, 
         [{ resize: {width: 640, height: 480} }], 
-        { format: 'jpg' }
+        { format: 'jpeg' }
       ); 
+
+      console.log(manipulateResult); 
       
-      const response = await fetch(result.uri);
+      const response = await fetch(manipulateResult.uri);
       const blob = await response.blob();
   
-      const storageRef = ref(storage, 'test/test-image.jpg');
+      const storageRef = ref(storage, 'test/test-image.jpeg');
       await uploadBytesResumable(storageRef, blob).then( () => {
         console.log("Success");
       });
