@@ -6,7 +6,7 @@ import InscriptionScreen from "../components/AddressForm";
 const User = () => {
 return (
 	<View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-	    <Text style={{ color: "#006600", fontSize: 40 }}>User Screen!</Text>
+	    <Text style={{ color: "#006600", fontSize: 40 }}>User Login</Text>
 	    <Ionicons name="md-person-circle-outline" size={80} color="#006600" />
 		<InscriptionScreen />
 	</View>

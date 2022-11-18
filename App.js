@@ -13,6 +13,7 @@ import ListScreen from "./screens/ListScreen";
 import CameraScreen from "./screens/CameraScreen";
 import HomeScreen from "./screens/HomeScreen";
 
+
 const ListStack = createStackNavigator({
 	List: ListScreen,
 	Map: MapScreen,}
@@ -102,7 +103,7 @@ List: {
 	},
 },
 Profile: {
-	screen: CameraScreen,
+	screen: UserScreen,
 	navigationOptions: {
 		headerStyle: { backGroundColor: '#i35631' },
 		tabBarLabel: "Profile",

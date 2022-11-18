@@ -1,46 +1,92 @@
-import React from 'react';
-import { GoogleMap, LoadScript, Marker, InfoWindow, useJsApiLoader } from '@react-google-maps/api';
+import React, {useEffect,useState} from 'react';
+import { Text, View, ActivityIndicator, StyleSheet} from 'react-native';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import * as Location from 'expo-location';
 
-const containerStyle = {
-  width: '400px',
-  height: '400px'
-};
+import { MATERIALS } from '../constants';
+import { primaryColor } from '../styles/constants';
+import Results from '../components/Results';
 
-const center = {
-  lat: 100,
-  lng: 100
-};
-
-function MyComponent() {
-  const { isLoaded } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyDPF40rHduHmPxgyqZ5hazq2EXYRJQaLM0"
-  })
-
-  const [map, setMap] = React.useState(null)
-
-  const onLoad = React.useCallback(function callback(map) {
-    const bounds = new window.google.maps.LatLngBounds();
-    map.fitBounds(bounds);
-    setMap(map)
-  }, [])
-
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null)
-  }, [])
-
-  return isLoaded ? (
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={10}
-        onLoad={onLoad}
-        onUnmount={onUnmount}
-      >
-        { /* Child components, such as markers, info windows, etc. */ }
-        <></>
-      </GoogleMap>
-  ) : <></>
+const searchParams = {
+  maxDistance: 25,
+  maxResults: 20,
 }
 
-export default React.memo(MyComponent)
+const Map = ({ label }) => {
+  const [location, setLocation] = useState(null);
+  const [errorMsg, seterrorMsg] = useState(null);
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function getPermissions(){
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted'){
+        seterrorMsg('Please allow location permission to use this feature');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+      setLoading(false);
+
+      searchParams.geolocation = { 
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+       };
+      
+    }
+    getPermissions();
+  }, []);
+
+  if (errorMsg){
+    return (
+      <View style={styles.mapContainer}>
+        <Text>{errorMsg}</Text>
+      </View>
+    );
+  }
+
+
+  switch(label){
+    case "Government_Dropoff1paper":
+      searchParams.material_id = MATERIALS.paperCup;   
+    case "Retail_Grocery1foam":
+      searchParams.material_id = MATERIALS.foam;
+    case "Retail_Grocery1plastic":
+      searchParams.material_id = MATERIALS.plasticBag;
+    case "Retail_Hardware1cfl":
+      searchParams.material_id = MATERIALS.cfl;
+  }
+
+
+  return (
+    <View style={styles.mapContainer}>
+      { isLoading ? 
+        <ActivityIndicator size="large" color={primaryColor}/> :
+        <MapView
+          provider={PROVIDER_GOOGLE}
+          style={{flex: 1}}
+          initialRegion={{
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+          showsUserLocation={true}
+          showsMyLocationButton={true}
+        >
+          <Results searchParams={searchParams}></Results>      
+        </MapView> 
+      }
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  mapContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  }
+})
+
+export default Map

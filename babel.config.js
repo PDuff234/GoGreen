@@ -1,20 +1,3 @@
-/*
-module.exports = function(api) {
-  api.cache(true);
-  return {
-    presets: ['babel-preset-expo'],
-  };
-};
-*/
-/*
-module.exports = {
-  presets: ["module:metro-react-native-babel-preset"],
-  plugins: [
-    "react-native-reanimated/plugin",
-  ],
-};
-*/
-
 module.exports = function (api) {
   api.cache(true);
 
@@ -22,10 +5,17 @@ module.exports = function (api) {
     presets: ["babel-preset-expo"],
     env: {
       development: {
-        plugins: ["react-native-reanimated/plugin"],
+        plugins: [[
+          "module:react-native-dotenv",
+          {
+            envName: "APP_ENV",
+            moduleName: "@env",
+            path: ".env",
+          }
+        ],"@babel/plugin-proposal-export-namespace-from", "react-native-reanimated/plugin"],
       },
       production: {
-        plugins: ["react-native-reanimated/plugin", "react-native-paper/babel"],
+        plugins: ["react-native-paper/babel", "@babel/plugin-proposal-export-namespace-from", "react-native-reanimated/plugin"],
       },
     },
   };

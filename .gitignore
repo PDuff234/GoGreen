@@ -9,6 +9,8 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+ApiKey.js
 
 # macOS
 .DS_Store
+*.log
