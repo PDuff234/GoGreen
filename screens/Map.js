@@ -10,6 +10,7 @@ import Results from '../components/Results';
 const searchParams = {
   maxDistance: 25,
   maxResults: 20,
+  materialId: 429,
 }
 
 const Map = ({ label }) => {
@@ -49,13 +50,13 @@ const Map = ({ label }) => {
 
   switch(label){
     case "Government_Dropoff1paper":
-      searchParams.material_id = MATERIALS.paperCup;   
+      searchParams.materialId = MATERIALS.paperCup;   
     case "Retail_Grocery1foam":
-      searchParams.material_id = MATERIALS.foam;
+      searchParams.materialId = MATERIALS.foam;
     case "Retail_Grocery1plastic":
-      searchParams.material_id = MATERIALS.plasticBag;
+      searchParams.materialId = MATERIALS.plasticBag;
     case "Retail_Hardware1cfl":
-      searchParams.material_id = MATERIALS.cfl;
+      searchParams.materialId = MATERIALS.cfl;
   }
 
 

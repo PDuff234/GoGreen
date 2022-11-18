@@ -52,11 +52,12 @@ const Results = ({ searchParams }) => {
     <>
     {
       locations ? 
-      locations.map(({ latitude, longitude }) => 
+      locations.map(({ latitude, longitude, location_id }) => 
         <Marker 
           coordinate={{latitude, longitude}} 
           tappable={true} 
           onPress={handlePress} 
+          key={location_id}
         />
       ) : 
       <></>
