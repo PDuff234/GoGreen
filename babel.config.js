@@ -5,7 +5,14 @@ module.exports = function (api) {
     presets: ["babel-preset-expo"],
     env: {
       development: {
-        plugins: ["@babel/plugin-proposal-export-namespace-from", "react-native-reanimated/plugin"],
+        plugins: [[
+          "module:react-native-dotenv",
+          {
+            envName: "APP_ENV",
+            moduleName: "@env",
+            path: ".env",
+          }
+        ],"@babel/plugin-proposal-export-namespace-from", "react-native-reanimated/plugin"],
       },
       production: {
         plugins: ["react-native-paper/babel", "@babel/plugin-proposal-export-namespace-from", "react-native-reanimated/plugin"],
