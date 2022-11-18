@@ -10,7 +10,6 @@ import Results from '../components/Results';
 const searchParams = {
   maxDistance: 25,
   maxResults: 20,
-  materialId: 429,
 }
 
 const Map = ({ label }) => {
