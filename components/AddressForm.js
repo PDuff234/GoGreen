@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { View, TextInput, Button, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, TextInput, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useForm } from 'react-hook-form';
 
 const InscriptionScreen = () => {
@@ -26,8 +26,6 @@ const InscriptionScreen = () => {
     register('username'); 
     register('password'); 
   }, [register]);
-
-
 
   return (
     <View style = {{ flex: 1, alignItems: "center", justifyContent: "center", padding: 16 }}>
@@ -77,7 +75,7 @@ const styles = StyleSheet.create({
   },
  
   inputView: {
-    borderRadius: 30,
+    borderRadius: 100,
     width: "80%",
     height: 45,
     marginBottom: 20,
