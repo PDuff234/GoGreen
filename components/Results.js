@@ -18,7 +18,6 @@ const Results = ({ searchParams }) => {
           },
       });
       const parsed = await response.json();
-      console.log(parsed);
       setLocations(parsed.result);
     }
     getResults();
