@@ -11,13 +11,17 @@ const Results = ({ searchParams }) => {
 
   useEffect(() => {
     async function getResults() {
-      const response = await fetch(`https://api.earth911.com/earth911.searchLocations?api_key=${earth911ApiKey}\&latitude=${searchParams.geolocation.latitude}&longitude=${searchParams.geolocation.longitude}\&business_only=${searchParams.businessOnly}&max_distance=${searchParams.maxDistance}\&max_results=${searchParams.maxResults}&matched_materials=${searchParams.materialId}`, {
+      const response = await fetch(`https://api.earth911.com/earth911.searchLocations?api_key=${earth911ApiKey}\&latitude=${searchParams.geolocation.latitude}&longitude=${searchParams.geolocation.longitude}\&business_only=${searchParams.businessOnly}&max_distance=${searchParams.maxDistance}\&max_results=${searchParams.maxResults}&material_id=${searchParams.materialId}`, {
           method: "GET",
           header: {
             Accept: "application/json",
           },
       });
       const parsed = await response.json();
+
+      if (parsed.error){
+        return
+      }
       setLocations(parsed.result);
     }
     getResults();
@@ -42,6 +46,7 @@ const Results = ({ searchParams }) => {
     Linking.openURL(`https://www.google.com/maps/dir/?api=1&${parameters}`);
  
   }
+
 
   return (
     <>
