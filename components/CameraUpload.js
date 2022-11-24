@@ -15,7 +15,7 @@ const CameraUpload = () => {
       quality: 1,
       allowsEditing:true
     });
-    if (!result.canceled) {
+    if (!result.cancelled) {
       setImage(result.uri);
     }
   };
