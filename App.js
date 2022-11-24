@@ -11,15 +11,16 @@ import MapScreen from "./screens/Map";
 import ListScreen from "./screens/ListScreen";
 import CameraScreen from "./screens/CameraScreen";
 import HomeScreen from "./screens/HomeScreen";
+import ModalWindow from "./components/ModalWindow";
 
 
 const ListStack = createStackNavigator({
 	List: ListScreen,
-	Map: MapScreen,}
-	,{
+	Map: MapScreen,
+	}, {
 		defaultNavigationOptions: {
 			headerStyle: {
-				backgroundColor: '#154C8A',
+				backgroundColor: '#006600',
 			}, 
 			headerTitleStyle: {
 				color: "#fff"
@@ -27,7 +28,20 @@ const ListStack = createStackNavigator({
 		}
 });
 
-
+const CameraStack = createStackNavigator({
+	Camera: CameraScreen,
+	Map: MapScreen,
+	Modal: ModalWindow,
+}, {
+	defaultNavigationOptions: {
+		headerStyle: {
+			backgroundColor: '#006600',
+		}, 
+		headerTitleStyle: {
+			color: "#fff"
+		},
+	}
+});
 
 const TabNavigator = createBottomTabNavigator({
 Home: {
@@ -67,7 +81,7 @@ Location: {
 	},
 },
 Camera: {
-	screen: CameraScreen,
+	screen: CameraStack,
 	navigationOptions: {
 		tabBarLabel: "Camera",
 		tabBarOptions: {
