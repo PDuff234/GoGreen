@@ -135,17 +135,25 @@ export default function CameraSnap({ onSnap, navigation }) {
         loading: true,
         modal: false,
       });
-      await uploadBytesResumable(storageRef, blob);
+      await uploadBytesResumable(storageRef, blob).catch((error) => {
+        console.log(error.code);
+        console.log(error?.message);
+        throw new Error("Firebase internal error")
+      });
   
       const functions = getFunctions();
       const getPredictionRequest = httpsCallable(functions, 'getPredictionRequest');
-      const result = await getPredictionRequest({ filepath: `temp/${filename}` });
+      const result = await getPredictionRequest({ filepath: `temp/${filename}` }).catch((error) => {
+        console.log(error.code);
+        console.log(error?.message);
+        throw new Error("Firebase internal error")
+      });
+  ;
   
       const state = determineState(result.data, navigation);
       state.modalProp.navigation = navigation;
       setNav(state);
-    } catch (error) {
-      console.log(error)
+    } catch {
       setNav({
         modal: true,
         loading: false,
