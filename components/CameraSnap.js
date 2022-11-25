@@ -4,11 +4,10 @@ import { Camera } from "expo-camera";
 import * as ImagePicker from 'expo-image-picker';
 import { storage } from "../firebaseConfig";
 import { ref, uploadBytesResumable } from "firebase/storage";
-import { getFunctions, httpsCallable } from "firebase/functions";
 import * as ImageManipulator from "expo-image-manipulator";
 
 import ModalWindow from "./ModalWindow";
-import ItemContext from "../MapContext";
+import ItemContext from "../ItemContext";
 import { recycleGreen } from "../styles/constants";
 
 export default function CameraSnap({ onSnap, navigation }) {
@@ -21,7 +20,7 @@ export default function CameraSnap({ onSnap, navigation }) {
   });
   const [type, setType] = useState(Camera.Constants.Type.back);
 
-  const { state, setContextState, getPrediction } = useContext(ItemContext);
+  const { itemContext, setItemContext, getPrediction } = useContext(ItemContext);
 
   let camera = Camera;
 
@@ -93,11 +92,10 @@ export default function CameraSnap({ onSnap, navigation }) {
     });
     if (!result.canceled) {
       setCapturedImage(result); 
-      await handleSave();
+      handleSave();
     }
   };
-
-  console.log(state);
+  
   return (
     <View
       style={{
@@ -243,8 +241,8 @@ export default function CameraSnap({ onSnap, navigation }) {
       <Modal visible={errorState.modal}>
         <ModalWindow modalProp={errorState.modalProp} handleClick={setError} navigation={navigation}/>
       </Modal>
-      <Modal visible={state.modal}>
-        <ModalWindow modalProp={state.modalProp} handleClick={setContextState} navigation={navigation}/>
+      <Modal visible={itemContext.modal}>
+        <ModalWindow modalProp={itemContext.modalProp} handleClick={setItemContext} navigation={navigation}/>
       </Modal>
     </View>
   );

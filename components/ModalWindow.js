@@ -1,21 +1,21 @@
+import { useContext } from "react";
 import { StyleSheet, Text, View, Button, } from "react-native";
 import  { FontAwesome5 } from "@expo/vector-icons";
 
+import ItemContext from "../ItemContext";
 import { recycleGreen } from "../styles/constants";
 
 
 const ModalWindow = ({ modalProp, handleClick, navigation }) => {
-  const { buttonTitle, text, icon, screen, matId  } = modalProp;
-
+  const { buttonTitle, text, icon, screen } = modalProp;
+  const { itemContext } = useContext(ItemContext);
+  const { matid } = itemContext;
 
   const handleModalClick = () => {
-    if (screen === "Map"){
-      navigation.navigate(screen, {matId});
-    } else {
-      navigation.navigate(screen);
-    }
+    navigation.navigate(screen);
     handleClick({
       modal: false,
+      matid,
     });
   }
   return(
