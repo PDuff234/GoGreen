@@ -3,19 +3,12 @@ import { Text, View, ActivityIndicator, StyleSheet} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import * as Location from 'expo-location';
 
-import { MATERIALS } from '../constants';
-import { primaryColor } from '../styles/constants';
+import { recycleGreen } from '../styles/constants';
 import Results from '../components/Results';
 
-const searchParams = {
-  maxDistance: 25,
-  maxResults: 20,
-}
-
-const Map = ({ label }) => {
+const Map = () => {
   const [location, setLocation] = useState(null);
   const [errorMsg, seterrorMsg] = useState(null);
-  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     async function getPermissions(){
@@ -26,17 +19,21 @@ const Map = ({ label }) => {
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-      setLoading(false);
-
-      searchParams.geolocation = { 
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-       };
-      
+      let { latitude, longitude } = location.coords;
+      setLocation({
+        latitude,
+        longitude,
+      });
     }
     getPermissions();
   }, []);
+
+  const handleLocationChange = async ({ latitude, longitude }) => {
+    setLocation({
+      latitude,
+      longitude
+    });
+  }
 
   if (errorMsg){
     return (
@@ -46,37 +43,29 @@ const Map = ({ label }) => {
     );
   }
 
-
-  switch(label){
-    case "Government_Dropoff1paper":
-      searchParams.material_id = MATERIALS.paperCup;   
-    case "Retail_Grocery1foam":
-      searchParams.material_id = MATERIALS.foam;
-    case "Retail_Grocery1plastic":
-      searchParams.material_id = MATERIALS.plasticBag;
-    case "Retail_Hardware1cfl":
-      searchParams.material_id = MATERIALS.cfl;
-  }
-
-
+  
   return (
     <View style={styles.mapContainer}>
-      { isLoading ? 
-        <ActivityIndicator size="large" color={primaryColor}/> :
+      { location ? 
         <MapView
           provider={PROVIDER_GOOGLE}
           style={{flex: 1}}
           initialRegion={{
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
+            latitude: location.latitude,
+            longitude: location.longitude,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
           showsUserLocation={true}
           showsMyLocationButton={true}
+          onUserLocationChange={(e) => handleLocationChange(e.nativeEvent.coordinate)}
         >
-          <Results searchParams={searchParams}></Results>      
-        </MapView> 
+          <Results 
+            lat={location.latitude} 
+            lng={location.longitude}
+          />  
+        </MapView> : 
+        <ActivityIndicator size="large" color={recycleGreen}/>  
       }
     </View>
   );
