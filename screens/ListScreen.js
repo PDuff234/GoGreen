@@ -5,7 +5,7 @@ import Constants from 'expo-constants';
 import CardList from '../components/CardList';
 
 import { collection, getDocs } from 'firebase/firestore';
-import { db, app } from '../firebaseConfig';
+import { db, app } from '../config/firebase';
 
 const ListScreen = ({ navigation }) => {
   const [state, setState] = useState({

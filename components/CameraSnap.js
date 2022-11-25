@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, Image } from "react-native";
 import { Camera } from "expo-camera";
 import * as ImagePicker from 'expo-image-picker';
-import { storage } from "../firebaseConfig";
+import { storage } from "../config/firebase";
 import { ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
 import * as ImageManipulator from "expo-image-manipulator";
 
