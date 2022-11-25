@@ -40,7 +40,9 @@ export default function CameraSnap({ onSnap, navigation }) {
 
   const handleSave = async () => {
     try {
-      setPreviewVisible(false);
+      if (previewVisible) {
+        setPreviewVisible(false);
+      }
       const photo = capturedImage;
       const manipulateResult = await ImageManipulator.manipulateAsync(
         photo.uri, 
