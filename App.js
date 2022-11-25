@@ -12,7 +12,7 @@ import ListScreen from "./screens/ListScreen";
 import CameraScreen from "./screens/CameraScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ModalWindow from "./components/ModalWindow";
-
+import { ItemProvider } from "./MapContext";
 
 const ListStack = createStackNavigator({
 	List: ListScreen,
@@ -142,9 +142,12 @@ const Navigator = createAppContainer(TabNavigator);
 
 export default function App() {
 	return (
-		<Navigator>
-			<StatusBar style="auto"/>
-			<CameraScreen/>
-		</Navigator>
+		<ItemProvider>
+			<Navigator>
+				<StatusBar style="auto"/>
+				<CameraScreen/>
+			</Navigator>
+		</ItemProvider>
+
 	);
 }

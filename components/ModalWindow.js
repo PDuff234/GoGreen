@@ -4,8 +4,8 @@ import  { FontAwesome5 } from "@expo/vector-icons";
 import { recycleGreen } from "../styles/constants";
 
 
-const ModalWindow = ({ modalProp, handleClick }) => {
-  const { buttonTitle, text, icon, screen, navigation, matId  } = modalProp;
+const ModalWindow = ({ modalProp, handleClick, navigation }) => {
+  const { buttonTitle, text, icon, screen, matId  } = modalProp;
 
 
   const handleModalClick = () => {
@@ -15,7 +15,6 @@ const ModalWindow = ({ modalProp, handleClick }) => {
       navigation.navigate(screen);
     }
     handleClick({
-      loading: false,
       modal: false,
     });
   }
