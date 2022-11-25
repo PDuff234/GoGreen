@@ -16,7 +16,9 @@ export default function CameraSnap({ onSnap, navigation }) {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [errorState, setError] = useState({
+    modal: false
+  });
   const [type, setType] = useState(Camera.Constants.Type.back);
 
   const { state, setContextState, getPrediction } = useContext(ItemContext);
@@ -61,9 +63,9 @@ export default function CameraSnap({ onSnap, navigation }) {
       setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
       setError({
         modal: true,
-        loading: false,
         modalProp: {
           buttonTitle: "Snap another picture",
           text: "Sorry an error just occured! Please try again",
@@ -238,11 +240,11 @@ export default function CameraSnap({ onSnap, navigation }) {
  
         </>       
       }
+      <Modal visible={errorState.modal}>
+        <ModalWindow modalProp={errorState.modalProp} handleClick={setError} navigation={navigation}/>
+      </Modal>
       <Modal visible={state.modal}>
-        { error ? 
-          <ModalWindow modalProp={error} handleClick={setContextState} navigation={navigation}/> :
-          <ModalWindow modalProp={state.modalProp} handleClick={setContextState} navigation={navigation}/>
-        }
+        <ModalWindow modalProp={state.modalProp} handleClick={setContextState} navigation={navigation}/>
       </Modal>
     </View>
   );
