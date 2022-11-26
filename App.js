@@ -12,6 +12,18 @@ import MapDisplay from "./screens/Map";
 import ListScreen from "./screens/ListScreen";
 import CameraScreen from "./screens/CameraScreen";
 import HomeScreen from "./screens/HomeScreen";
+import { View } from "react-native";
+
+
+import TestScreen from "./screens/TestScreen";
+import SplashScreen from "./screens/SplashScreen";
+import SignInScreen from "./screens/SignInScreen";
+import SignUpScreen from "./screens/SignUpScreen";
+
+
+import GuideScreen1 from "./screens/GuideScreen1";
+import GuideScreen2 from "./screens/GuideScreen2";
+import GuideScreen3 from "./screens/GuideScreen3";
 
 
 const ListStack = createStackNavigator({
@@ -123,7 +135,143 @@ Profile: {
 },
 });
 
-const Navigator = createAppContainer(TabNavigator);
+
+const AuthStack = createStackNavigator({
+    SplashScreen: {
+        screen: SplashScreen,
+    },
+    SignInScreen: {
+        screen: SignInScreen,
+    },
+    SignUpScreen: {
+        screen: SignUpScreen,
+    }},
+	{
+		defaultNavigationOptions: {
+			headerShown: false,
+		}
+	}
+);
+
+
+
+// Custom Tab Screen *************
+
+// const GuideTab = createBottomTabNavigator({
+// 	Guide1: {
+// 		screen: GuideScreen1,
+// 		navigationOptions: {
+// 			tabBarLabel: "Home",
+// 			tabBarOptions: {
+// 				activeTintColor: "#006600",
+// 			},
+// 			tabBarIcon: (tabInfo) => {
+// 				return (
+// 				<Ionicons
+// 					name="md-home"
+// 					size={24}
+// 					color={tabInfo.focused ? "#006600" : "#8e8e93"}
+// 				/>
+// 				);
+// 			},
+// 		},
+// 	},
+// 	Guide2: {
+// 		screen: GuideScreen2,
+// 		navigationOptions: {
+// 			tabBarLabel: "Location",
+// 			tabBarOptions: {
+// 				activeTintColor: "#006600",
+// 			},
+// 			tabBarIcon: (tabInfo) => {
+// 				return (
+// 				<Ionicons
+// 					name="location-outline"
+// 					size={24}
+// 					color={tabInfo.focused ? "#006600" : "#8e8e93"}
+// 				/>
+// 				);
+// 			},
+// 		},
+// 	},
+// 	Guide3: {
+// 		screen: GuideScreen3,
+// 		navigationOptions: {
+// 			tabBarLabel: "Camera",
+// 			tabBarOptions: {
+// 				activeTintColor: "#006600",
+// 			},
+// 			tabBarIcon: (tabInfo) => {
+// 				return (
+// 				<Ionicons
+// 					name="camera-outline"
+// 					size={24}
+// 					color={tabInfo.focused ? "#006600" : "#8e8e93"}
+// 				/>
+// 				);
+// 			},
+// 		},
+// 	},
+// 	});
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+const GuideStack = createStackNavigator({
+	Guide1: {
+		screen: GuideScreen1
+	},
+	Guide2: {
+		screen: GuideScreen2
+	},
+	Guide3: {
+		screen: GuideScreen3
+	}},
+	{
+		defaultNavigationOptions: {
+			headerShown: false
+		}
+})
+
+
+
+
+
+
+
+
+
+const RootStack = createStackNavigator({
+    AuthStack: {
+        screen: AuthStack,
+    },
+    GuideNavigator: {
+        screen: GuideStack,
+    },
+	TabNavigator: {
+		screen: TabNavigator
+	}},
+	{
+		defaultNavigationOptions: {
+			headerShown: false
+		}
+	}
+);
+
+const Navigator = createAppContainer(RootStack);
+
+
+
 
 export default function App() {
 	return (
@@ -133,3 +281,6 @@ export default function App() {
 		</Navigator>
 	);
 }
+
+
+
