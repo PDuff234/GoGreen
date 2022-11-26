@@ -1,8 +1,9 @@
 import { createContext, useState } from "react";
 import { getFunctions, httpsCallable } from "firebase/functions";
+import * as Location from 'expo-location';
 
-import { MATERIALS } from "./constants";
-import { earth911ApiKey } from "./ApiKey";
+import { MATERIALS } from "../constants";
+import { earth911ApiKey } from "../ApiKey";
 
 const ItemContext = createContext(); 
 
@@ -84,8 +85,8 @@ export function ItemProvider({ children }){
     modal: false,
   }); 
 
-  const [locations, setLocation] = useState([]);
-  
+  const [location, setLocation] = useState(null);
+  const [markers, setMarkers] = useState([]);
 
   const getPrediction = async (image) => {
     const functions = getFunctions();
@@ -111,9 +112,6 @@ export function ItemProvider({ children }){
         modalProp,
       })
     }
-    
-
-
   }
 
   const getLocations = async (lat, lng) => {
@@ -130,12 +128,34 @@ export function ItemProvider({ children }){
       return;
     }
 
-    console.log(parsed.result);
-    setLocation(parsed.result);
+    setMarkers(parsed.result);
+  }
+
+  const updateUserLocation = async () => {
+    let location = await Location.getCurrentPositionAsync({});
+    let { latitude, longitude } = location.coords;
+
+    setLocation({
+      latitude,
+      longitude
+    })
   }
 
   return(
-    <ItemContext.Provider value={{ itemContext, locations, setItemContext, getPrediction, getLocations }}>{children}</ItemContext.Provider>
+    <ItemContext.Provider 
+      value={{ 
+        itemContext, 
+        location,
+        markers,
+        setMarkers, 
+        setItemContext, 
+        getPrediction, 
+        getLocations, 
+        updateUserLocation,
+      }}
+    >
+      {children}
+    </ItemContext.Provider>
   );
 }
 

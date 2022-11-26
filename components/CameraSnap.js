@@ -7,7 +7,7 @@ import { ref, uploadBytesResumable } from "firebase/storage";
 import * as ImageManipulator from "expo-image-manipulator";
 
 import ModalWindow from "./ModalWindow";
-import ItemContext from "../ItemContext";
+import ItemContext from "../context/ItemContext";
 import { recycleGreen } from "../styles/constants";
 
 export default function CameraSnap({ onSnap, navigation }) {
@@ -60,8 +60,10 @@ export default function CameraSnap({ onSnap, navigation }) {
         console.log(error?.message);
         throw new Error("Firebase internal error during upload");
       });
+
       await getPrediction(filename);
       setLoading(false);
+      
     } catch (error) {
       console.log(error);
       setLoading(false);

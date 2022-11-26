@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { StyleSheet, Text, View, Button, } from "react-native";
 import  { FontAwesome5 } from "@expo/vector-icons";
 
-import ItemContext from "../ItemContext";
+import ItemContext from "../context/ItemContext";
 import { recycleGreen } from "../styles/constants";
 
 

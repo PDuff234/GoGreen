@@ -5,16 +5,16 @@ import * as Linking from 'expo-linking';
 
 import { GOOGLE_MAPS_GEOENCODE_ENDPOINT } from "@env";
 import { googleMapsApiKey } from '../ApiKey';
-import ItemContext from '../ItemContext';
+import ItemContext from '../context/ItemContext';
 
 
 
 const Results = ({ lat, lng }) => {
-  const { itemContext, locations, getLocations } = useContext(ItemContext);
+  const { itemContext, location, markers, getLocations } = useContext(ItemContext);
 
   useEffect(() => {
     getLocations(lat,lng);
-  }, [itemContext.matid, lat, lng])
+  }, [itemContext.matid, location])
 
   const handlePress = async (event) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
@@ -39,8 +39,8 @@ const Results = ({ lat, lng }) => {
   return (
     <>
     {
-      locations ? 
-      locations.map(({ latitude, longitude, location_id }) => 
+      markers ? 
+      markers.map(({ latitude, longitude, location_id }) => 
         <Marker 
             coordinate={{latitude, longitude}} 
             tappable={true} 
