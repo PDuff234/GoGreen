@@ -17,7 +17,7 @@ const ListStack = createStackNavigator({
 	,{
 		defaultNavigationOptions: {
 			headerStyle: {
-				backgroundColor: '#154C8A',
+				backgroundColor: '#006600',
 			}, 
 			headerTitleStyle: {
 				color: "#fff"
@@ -125,7 +125,6 @@ const Navigator = createAppContainer(TabNavigator);
 export const AppStack = () => {
   return (
 		<Navigator>
-			<StatusBar style="auto"/>
 			<CameraScreen/>
 		</Navigator>
   );
