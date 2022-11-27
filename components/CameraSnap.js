@@ -2,12 +2,14 @@ import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, Image, ActivityIndicator, Modal } from "react-native";
 import { Camera } from "expo-camera";
 import * as ImagePicker from 'expo-image-picker';
-import { storage } from "../firebaseConfig";
+import { db, storage } from "../firebaseConfig";
 import { ref, uploadBytesResumable } from "firebase/storage";
+import { doc, setDoc } from "firebase/firestore";
 import * as ImageManipulator from "expo-image-manipulator";
 
 import ModalWindow from "./ModalWindow";
 import ItemContext from "../context/ItemContext";
+import { determineLabel } from "../functions/determineLabel";
 import { recycleGreen } from "../styles/constants";
 
 export default function CameraSnap({ onSnap, navigation }) {
@@ -60,8 +62,13 @@ export default function CameraSnap({ onSnap, navigation }) {
         console.log(error?.message);
         throw new Error("Firebase internal error during upload");
       });
-
       await getPrediction(filename);
+      await setDoc(doc(db, "UserData", "TestUser", "Recyclables", filename), {
+        id: filename,
+        material: determineLabel(itemContext.matid),
+        url: `gs://${storageRef.bucket}/${storageRef.fullPath}`,
+        searchid: itemContext.matid,
+      });
       setLoading(false);
       
     } catch (error) {
