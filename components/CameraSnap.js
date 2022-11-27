@@ -9,7 +9,7 @@ import * as ImageManipulator from "expo-image-manipulator";
 
 import ModalWindow from "./ModalWindow";
 import ItemContext from "../context/ItemContext";
-import { determineLabel } from "../functions/determineLabel";
+import { determineLabel, determineModalState } from "../functions/helperFunctions";
 import { recycleGreen } from "../styles/constants";
 
 export default function CameraSnap({ onSnap, navigation }) {
@@ -17,12 +17,12 @@ export default function CameraSnap({ onSnap, navigation }) {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [errorState, setError] = useState({
-    modal: false
+  const [modal, setModal] = useState({
+    modal: false,
   });
   const [type, setType] = useState(Camera.Constants.Type.back);
 
-  const { itemContext, setItemContext, getPrediction } = useContext(ItemContext);
+  const { itemPredictionRef, setItemPrediction, getPrediction } = useContext(ItemContext);
 
   let camera = Camera;
 
@@ -40,7 +40,7 @@ export default function CameraSnap({ onSnap, navigation }) {
     return <Text>No access to camera</Text>;
   }
 
-  const handleSave = async () => {
+  const determineItem = async () => {
     try {
       if (previewVisible) {
         setPreviewVisible(false);
@@ -63,18 +63,27 @@ export default function CameraSnap({ onSnap, navigation }) {
         throw new Error("Firebase internal error during upload");
       });
       await getPrediction(filename);
-      await setDoc(doc(db, "UserData", "TestUser", "Recyclables", filename), {
-        id: filename,
-        material: determineLabel(itemContext.matid),
-        url: `gs://${storageRef.bucket}/${storageRef.fullPath}`,
-        searchid: itemContext.matid,
+
+      console.log(itemPredictionRef.current);
+      if (itemPredictionRef.current.matid){
+        await setDoc(doc(db, "UserData", "TestUser", "Recyclables", filename), {
+          id: filename,
+          material: determineLabel(itemPredictionRef.current.matid),
+          url: `gs://${storageRef.bucket}/${storageRef.fullPath}`,
+          searchid: itemPredictionRef.current.matid,
+        });
+      }
+      
+      const { modalProp } = determineModalState(itemPredictionRef.current.label);
+      console.log(modalProp);
+      setModal({
+        modal: true,
+        modalProp,
       });
       setLoading(false);
-      
     } catch (error) {
       console.log(error);
-      setLoading(false);
-      setError({
+      setModal({
         modal: true,
         modalProp: {
           buttonTitle: "Snap another picture",
@@ -84,6 +93,7 @@ export default function CameraSnap({ onSnap, navigation }) {
           navigation,
         }
       });
+      setLoading(false);
     }
   }
 
@@ -103,7 +113,7 @@ export default function CameraSnap({ onSnap, navigation }) {
     });
     if (!result.canceled) {
       setCapturedImage(result); 
-      handleSave();
+      determineItem();
     }
   };
   
@@ -155,7 +165,7 @@ export default function CameraSnap({ onSnap, navigation }) {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={handleSave}
+                onPress={determineItem}
                 style={{
                   width: 130,
                   height: 40,
@@ -249,11 +259,8 @@ export default function CameraSnap({ onSnap, navigation }) {
  
         </>       
       }
-      <Modal visible={errorState.modal}>
-        <ModalWindow modalProp={errorState.modalProp} handleClick={setError} navigation={navigation}/>
-      </Modal>
-      <Modal visible={itemContext.modal}>
-        <ModalWindow modalProp={itemContext.modalProp} handleClick={setItemContext} navigation={navigation}/>
+      <Modal visible={modal.modal}>
+        <ModalWindow modalProp={modal.modalProp} handleClick={setModal} navigation={navigation}/>
       </Modal>
     </View>
   );
