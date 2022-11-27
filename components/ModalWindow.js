@@ -1,21 +1,16 @@
-import { useContext } from "react";
 import { StyleSheet, Text, View, Button, } from "react-native";
 import  { FontAwesome5 } from "@expo/vector-icons";
 
-import ItemContext from "../ItemContext";
 import { recycleGreen } from "../styles/constants";
 
 
 const ModalWindow = ({ modalProp, handleClick, navigation }) => {
   const { buttonTitle, text, icon, screen } = modalProp;
-  const { itemContext } = useContext(ItemContext);
-  const { matid } = itemContext;
 
   const handleModalClick = () => {
     navigation.navigate(screen);
     handleClick({
       modal: false,
-      matid,
     });
   }
   return(

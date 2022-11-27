@@ -1,14 +1,16 @@
-import React, {useEffect,useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import { Text, View, ActivityIndicator, StyleSheet} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import * as Location from 'expo-location';
 
+import ItemContext from '../context/ItemContext';
 import { recycleGreen } from '../styles/constants';
 import Results from '../components/Results';
 
 const Map = () => {
-  const [location, setLocation] = useState(null);
   const [errorMsg, seterrorMsg] = useState(null);
+  const [location, setLocation] = useState(null);
+
 
   useEffect(() => {
     async function getPermissions(){
@@ -20,20 +22,16 @@ const Map = () => {
 
       let location = await Location.getCurrentPositionAsync({});
       let { latitude, longitude } = location.coords;
+
       setLocation({
         latitude,
         longitude,
-      });
+      })
+
     }
     getPermissions();
   }, []);
 
-  const handleLocationChange = async ({ latitude, longitude }) => {
-    setLocation({
-      latitude,
-      longitude
-    });
-  }
 
   if (errorMsg){
     return (
@@ -43,7 +41,16 @@ const Map = () => {
     );
   }
 
-  
+ const updateUserLocation = async () => {
+  let location = await Location.getCurrentPositionAsync({});
+  let { latitude, longitude } = location.coords;
+
+  setLocation({
+    latitude,
+    longitude,
+  })
+ }
+
   return (
     <View style={styles.mapContainer}>
       { location ? 
@@ -58,7 +65,7 @@ const Map = () => {
           }}
           showsUserLocation={true}
           showsMyLocationButton={true}
-          onUserLocationChange={(e) => handleLocationChange(e.nativeEvent.coordinate)}
+          onUserLocationChange={updateUserLocation}
         >
           <Results 
             lat={location.latitude} 

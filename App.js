@@ -12,7 +12,7 @@ import ListScreen from "./screens/ListScreen";
 import CameraScreen from "./screens/CameraScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ModalWindow from "./components/ModalWindow";
-import { ItemProvider } from "./ItemContext";
+import { ItemProvider } from "./context/ItemContext";
 
 const ListStack = createStackNavigator({
 	List: ListScreen,
