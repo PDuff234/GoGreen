@@ -5,7 +5,6 @@ import { createStackNavigator } from "react-navigation-stack";
 import { createBottomTabNavigator } from "react-navigation-tabs";
 
 import UserScreen from "../screens/UserScreen"; 
- import MapScreen from "../screens/MapScreen";
 import MapDisplay from "../screens/Map"; 
 import ListScreen from "../screens/ListScreen";
 import CameraScreen from "../screens/CameraScreen";
@@ -13,7 +12,7 @@ import HomeScreen from "../screens/HomeScreen";
 
 const ListStack = createStackNavigator({
 	List: ListScreen,
-	Map: MapScreen,}
+	Map: MapDisplay,}
 	,{
 		defaultNavigationOptions: {
 			headerStyle: {

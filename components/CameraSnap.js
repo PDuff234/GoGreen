@@ -11,7 +11,6 @@ import ModalWindow from "./ModalWindow";
 import ItemContext from "../context/ItemContext";
 import { determineUserLabel, determineModalState } from "../functions/helperFunctions";
 import { recycleGreen } from "../styles/constants";
-import { firebaseConfig } from "firebase-functions/v1";
 
 export default function CameraSnap({ onSnap, navigation }) {
   const [hasPermission, setHasPermission] = useState(null);

@@ -7,7 +7,7 @@ import ItemContext from '../context/ItemContext';
 import { recycleGreen } from '../styles/constants';
 import Results from '../components/Results';
 
-const Map = () => {
+const MapDisplay = () => {
   const [errorMsg, seterrorMsg] = useState(null);
   const [location, setLocation] = useState(null);
 
@@ -85,4 +85,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Map
+export default MapDisplay

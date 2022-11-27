@@ -3,7 +3,7 @@ import { Animated, StyleSheet, View, TouchableOpacity, Button, Text, Pressable, 
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { collection, doc, deleteDoc, getDocs } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
+import { db } from '../config/firebase';
 
 import ItemContext from '../context/ItemContext';
 import Card from './Card';
