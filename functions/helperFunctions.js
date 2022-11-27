@@ -1,6 +1,6 @@
 import { MATERIALS } from "../constants";
 
-export const determineLabel = (id) => {
+export const determineUserLabel = (id) => {
   switch (id){
     case 429:
       return "Plastic Bag";
@@ -51,7 +51,6 @@ export const determineMatId = (label) => {
 }
 
 export const determineModalState = (label) => {
-  console.log(label);
   if (!label || label === "Trash") {
     return(
       {

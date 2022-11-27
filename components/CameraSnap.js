@@ -9,7 +9,7 @@ import * as ImageManipulator from "expo-image-manipulator";
 
 import ModalWindow from "./ModalWindow";
 import ItemContext from "../context/ItemContext";
-import { determineLabel, determineModalState } from "../functions/helperFunctions";
+import { determineUserLabel, determineModalState } from "../functions/helperFunctions";
 import { recycleGreen } from "../styles/constants";
 
 export default function CameraSnap({ onSnap, navigation }) {
@@ -64,18 +64,16 @@ export default function CameraSnap({ onSnap, navigation }) {
       });
       await getPrediction(filename);
 
-      console.log(itemPredictionRef.current);
       if (itemPredictionRef.current.matid){
         await setDoc(doc(db, "UserData", "TestUser", "Recyclables", filename), {
           id: filename,
-          material: determineLabel(itemPredictionRef.current.matid),
+          material: determineUserLabel(itemPredictionRef.current.matid),
           url: `gs://${storageRef.bucket}/${storageRef.fullPath}`,
           searchid: itemPredictionRef.current.matid,
         });
       }
       
       const { modalProp } = determineModalState(itemPredictionRef.current.label);
-      console.log(modalProp);
       setModal({
         modal: true,
         modalProp,
