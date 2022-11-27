@@ -3,6 +3,12 @@ import { Text, StyleSheet } from 'react-native';
 import { Formik } from 'formik';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import firebase from 'firebase/compat/app'; 
+
+const functions = require('firebase-functions'); 
+const admin = require('firebase-admin'); 
+admin.initializeApp(functions.config().firebase); 
+
 
 import { View, TextInput, Logo, Button, FormErrorMessage } from '../components';
 import { Images, Colors, auth } from '../config';
@@ -21,10 +27,23 @@ export const SignupScreen = ({ navigation }) => {
     confirmPasswordVisibility
   } = useTogglePasswordVisibility();
 
+  const db = admin.firestore(); 
+
   const handleSignup = async values => {
     const { email, password } = values;
 
-    createUserWithEmailAndPassword(auth, email, password).catch(error =>
+    createUserWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      exports.createUser = functions.auth.user().onCreate((user) => {
+        const { uid } = user; 
+    
+        const userCollection = db.collection('UserData'); 
+        userCollection.doc(uid).set({
+          email: email
+        }); 
+      }); 
+    })
+    .catch(error =>
       setErrorState(error.message)
     );
   };
