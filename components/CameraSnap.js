@@ -1,18 +1,31 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, Image } from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, Image, ActivityIndicator, Modal } from "react-native";
 import { Camera } from "expo-camera";
 import * as ImagePicker from 'expo-image-picker';
-import { storage } from "../config/firebase";
-import { ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
+import { db, storage } from "../config/firebase";
+import { ref, uploadBytesResumable } from "firebase/storage";
+import { doc, setDoc } from "firebase/firestore";
 import * as ImageManipulator from "expo-image-manipulator";
 
-export default function CameraSnap({ onSnap }) {
+import ModalWindow from "./ModalWindow";
+import ItemContext from "../context/ItemContext";
+import { determineUserLabel, determineModalState } from "../functions/helperFunctions";
+import { recycleGreen } from "../styles/constants";
+import { firebaseConfig } from "firebase-functions/v1";
+
+export default function CameraSnap({ onSnap, navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [modal, setModal] = useState({
+    modal: false,
+  });
   const [type, setType] = useState(Camera.Constants.Type.back);
 
-  let camera = Camera
+  const { itemPredictionRef, setItemPrediction, getPrediction } = useContext(ItemContext);
+
+  let camera = Camera;
 
   useEffect(() => {
     (async () => {
@@ -28,25 +41,66 @@ export default function CameraSnap({ onSnap }) {
     return <Text>No access to camera</Text>;
   }
 
+  const determineItem = async () => {
+    try {
+      if (previewVisible) {
+        setPreviewVisible(false);
+      }
+      const photo = capturedImage;
+      const manipulateResult = await ImageManipulator.manipulateAsync(
+        photo.uri, 
+        [{resize: {width: 1024, height: 1024}}],
+        { compress: 0.8, format: 'jpeg' }
+      ); 
+      const response = await fetch(manipulateResult.uri);
+      const blob = await response.blob();
+  
+      const filename = photo.uri.split("/").at(-1);
+      const storageRef = ref(storage, `temp/${filename}`);
+      setLoading(true);
+      await uploadBytesResumable(storageRef, blob).catch((error) => {
+        console.log(error.code);
+        console.log(error?.message);
+        throw new Error("Firebase internal error during upload");
+      });
+      await getPrediction(filename);
+
+      if (itemPredictionRef.current.matid){
+        await setDoc(doc(db, "UserData", "TestUser", "Recyclables", filename), {
+          id: filename,
+          material: determineUserLabel(itemPredictionRef.current.matid),
+          url: `gs://${storageRef.bucket}/${storageRef.fullPath}`,
+          searchid: itemPredictionRef.current.matid,
+        });
+      }
+      
+      const { modalProp } = determineModalState(itemPredictionRef.current.label);
+      setModal({
+        modal: true,
+        modalProp,
+      });
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setModal({
+        modal: true,
+        modalProp: {
+          buttonTitle: "Snap another picture",
+          text: "Sorry an error just occured! Please try again",
+          icon: "frown-open",
+          screen: "Camera",
+          navigation,
+        }
+      });
+      setLoading(false);
+    }
+  }
+
   const takePicture = async () => {
     if (!camera) return;
     let photo = await camera.takePictureAsync();
     setPreviewVisible(true);
     setCapturedImage(photo);
-    console.log(photo.uri); 
-
-    const manipulateResult = await ImageManipulator.manipulateAsync(
-      photo.uri, 
-      [{ resize: {width: 640, height: 480} }], 
-      { format: 'jpeg' }
-    ); 
-    const response = await fetch(manipulateResult.uri);
-    const blob = await response.blob();
-
-    const storageRef = ref(storage, 'test/test-image.jpeg');
-    await uploadBytesResumable(storageRef, blob).then( () => {
-      console.log("Success");
-    } );
   };
 
   const pickImage = async () => {
@@ -57,33 +111,16 @@ export default function CameraSnap({ onSnap }) {
       allowsEditing:true
     });
     if (!result.canceled) {
-      setPreviewVisible(true); 
       setCapturedImage(result); 
-      console.log(result); 
-
-      const manipulateResult = await ImageManipulator.manipulateAsync(
-        result.uri, 
-        [{ resize: {width: 640, height: 480} }], 
-        { format: 'jpeg' }
-      ); 
-
-      console.log(manipulateResult); 
-      
-      const response = await fetch(manipulateResult.uri);
-      const blob = await response.blob();
-  
-      const storageRef = ref(storage, 'test/test-image.jpeg');
-      await uploadBytesResumable(storageRef, blob).then( () => {
-        console.log("Success");
-      });
+      determineItem();
     }
   };
-
   
   return (
     <View
       style={{
         flex: 1,
+        justifyContent: 'center'
       }}
     >
       {previewVisible ? (
@@ -126,73 +163,104 @@ export default function CameraSnap({ onSnap }) {
                   Re-take
                 </Text>
               </TouchableOpacity>
+              <TouchableOpacity
+                onPress={determineItem}
+                style={{
+                  width: 130,
+                  height: 40,
+
+                  alignItems: "center",
+                  borderRadius: 4,
+                }}
+              >
+                <Text
+                  style={{
+                    color: "#fff",
+                    fontSize: 20,
+                  }}
+                >
+                  Save
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </ImageBackground>
-      ) : (
-        <Camera
-          style={{ flex: 1 }}
-          type={type}
-          ref={(r) => {
-            camera = r;
-          }}
-        >
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: "transparent",
-              flexDirection: "row",
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                position: "absolute",
-                top: "5%",
-                left: "5%",
-              }}
-              onPress={() => {
-                setType(
-                  type === Camera.Constants.Type.back
-                    ? Camera.Constants.Type.front
-                    : Camera.Constants.Type.back
-                );
-              }}
-            >
-              <Text style={{ fontSize: 20, marginBottom: 10, color: "white" }}>
-                {" "}
-                Flip{" "}
-              </Text>
-            </TouchableOpacity>
-            <View
-              style={{
-                position: "absolute",
-                bottom: 0,
-                flexDirection: "row",
-                flex: 1,
-                width: "100%",
-                padding: 20,
-                justifyContent: "space-between",
+      ) : 
+        <>
+          {loading ? 
+            <ActivityIndicator 
+              size="large"
+              color={recycleGreen}
+            /> :
+            <Camera
+              style={{ flex: 1 }}
+              type={type}
+              ref={(r) => {
+                camera = r;
               }}
             >
               <View
                 style={{
-                  alignSelf: "center",
                   flex: 1,
-                  alignItems: "center",
+                  backgroundColor: "transparent",
+                  flexDirection: "row",
                 }}
               >
-                <TouchableOpacity onPress={takePicture}> 
-                    <Image style={styles.snap} source = {require('../assets/Camera.png')}/>
+                <TouchableOpacity
+                  style={{
+                    position: "absolute",
+                    top: "5%",
+                    left: "5%",
+                  }}
+                  onPress={() => {
+                    setType(
+                      type === Camera.Constants.Type.back
+                        ? Camera.Constants.Type.front
+                        : Camera.Constants.Type.back
+                    );
+                  }}
+                >
+                  <Text style={{ fontSize: 20, marginBottom: 10, color: "white" }}>
+                    {" "}
+                    Flip{" "}
+                  </Text>
                 </TouchableOpacity>
+                <View
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    flexDirection: "row",
+                    flex: 1,
+                    width: "100%",
+                    padding: 20,
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <View
+                    style={{
+                      alignSelf: "center",
+                      flex: 1,
+                      alignItems: "center",
+                    }}
+                  >
+                    <TouchableOpacity onPress={takePicture}> 
+                        <Image style={styles.snap} source = {require('../assets/Camera.png')}/>
+                    </TouchableOpacity>
 
-                <TouchableOpacity onPress = {pickImage}>
-                  <Image style = {styles.button} source={require('../assets/Upload.png')}/>
-                </TouchableOpacity>
+                    <TouchableOpacity onPress = {pickImage}>
+                      <Image style = {styles.button} source={require('../assets/Upload.png')}/>
+                    </TouchableOpacity>
+                  </View>
+                </View>
               </View>
-            </View>
-          </View>
-        </Camera>
-      )}
+            </Camera>   
+          }
+ 
+        </>       
+      }
+      <Modal visible={modal.modal}>
+        <ModalWindow modalProp={modal.modalProp} handleClick={setModal} navigation={navigation}/>
+      </Modal>
     </View>
   );
 }
@@ -218,5 +286,5 @@ const styles = StyleSheet.create({
         height: 70,
         bottom: 0,
         borderRadius: 50,
-    }
+    },
   });
