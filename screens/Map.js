@@ -32,7 +32,7 @@ const Map = () => {
     );
   }
 
-  console.log(location);
+
   return (
     <View style={styles.mapContainer}>
       { location ? 
