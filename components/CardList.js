@@ -11,7 +11,7 @@ import Card from './Card';
 const AnimatedIcon = Animated.createAnimatedComponent(FontAwesome5);
 
 const CardList = ({ items, navigation, onDataChange }) => {
-  const { setItemContext } = useContext(ItemContext);
+  const { setItemPrediction } = useContext(ItemContext);
 
   const renderItem = ({item}) => {
     const {id, material, url} = item;
@@ -55,7 +55,7 @@ const CardList = ({ items, navigation, onDataChange }) => {
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("Map");
-            setItemContext({
+            setItemPrediction({
               matid: item.searchid,
             })
           }}

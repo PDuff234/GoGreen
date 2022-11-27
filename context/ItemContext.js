@@ -8,15 +8,8 @@ import { earth911ApiKey } from "../ApiKey";
 
 const ItemContext = createContext(); 
 
-const searchParams = {
-  maxDistance: 50,
-  maxResults: 20,
-};
-
 export function ItemProvider({ children }){
   const [itemPrediction, setItemPrediction, itemPredictionRef] = useStateWithRef(null); 
-  const [location, setLocation] = useState(null);
-  const [markers, setMarkers] = useState([]);
 
   const getPrediction = async (image) => {
     const functions = getFunctions();
@@ -35,44 +28,13 @@ export function ItemProvider({ children }){
     });
   }
 
-  const getLocations = async (lat, lng) => {
-    const response = await fetch(`https://api.earth911.com/earth911.searchLocations?api_key=${earth911ApiKey}&latitude=${lat}&longitude=${lng}&max_distance=${searchParams.maxDistance}&max_results=${searchParams.maxResults}&material_id=${itemContext.matid}`, {
-      method: "GET",
-      header: {
-        Accept: "application/json",
-      },
-    });
-
-    const parsed = await response.json();
-
-    if (parsed.error){
-      return;
-    }
-
-    setMarkers(parsed.result);
-  }
-
-  const updateUserLocation = async () => {
-    let location = await Location.getCurrentPositionAsync({});
-    let { latitude, longitude } = location.coords;
-
-    setLocation({
-      latitude,
-      longitude
-    })
-  }
-
+  console.log("Context");
   return(
     <ItemContext.Provider 
       value={{ 
         itemPredictionRef, 
-        location,
-        markers,
-        setMarkers, 
         setItemPrediction, 
         getPrediction, 
-        getLocations, 
-        updateUserLocation,
       }}
     >
       {children}

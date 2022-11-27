@@ -9,7 +9,8 @@ import Results from '../components/Results';
 
 const Map = () => {
   const [errorMsg, seterrorMsg] = useState(null);
-  const { location, updateUserLocation } = useContext(ItemContext);
+  const [location, setLocation] = useState(null);
+
 
   useEffect(() => {
     async function getPermissions(){
@@ -18,9 +19,17 @@ const Map = () => {
         seterrorMsg('Please allow location permission to use this feature');
         return;
       }
+
+      let location = await Location.getCurrentPositionAsync({});
+      let { latitude, longitude } = location.coords;
+
+      setLocation({
+        latitude,
+        longitude,
+      })
+
     }
     getPermissions();
-    updateUserLocation();
   }, []);
 
 
@@ -32,6 +41,15 @@ const Map = () => {
     );
   }
 
+ const updateUserLocation = async () => {
+  let location = await Location.getCurrentPositionAsync({});
+  let { latitude, longitude } = location.coords;
+
+  setLocation({
+    latitude,
+    longitude,
+  })
+ }
 
   return (
     <View style={styles.mapContainer}>
