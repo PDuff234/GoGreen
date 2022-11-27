@@ -5,7 +5,7 @@ import Constants from 'expo-constants';
 import CardList from '../components/CardList';
 
 import { collection, getDocs, query, onSnapshot  } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
+import { db, app } from '../config/firebase';
 
 
 const q = query(collection(db, "UserData", "TestUser", "Recyclables"));

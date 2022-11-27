@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, Image, ActivityIndicator, Modal } from "react-native";
 import { Camera } from "expo-camera";
 import * as ImagePicker from 'expo-image-picker';
-import { db, storage } from "../firebaseConfig";
+import { db, storage } from "../config/firebase";
 import { ref, uploadBytesResumable } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
 import * as ImageManipulator from "expo-image-manipulator";
@@ -11,6 +11,7 @@ import ModalWindow from "./ModalWindow";
 import ItemContext from "../context/ItemContext";
 import { determineUserLabel, determineModalState } from "../functions/helperFunctions";
 import { recycleGreen } from "../styles/constants";
+import { firebaseConfig } from "firebase-functions/v1";
 
 export default function CameraSnap({ onSnap, navigation }) {
   const [hasPermission, setHasPermission] = useState(null);

@@ -1,132 +1,159 @@
-import React, { useEffect, useCallback, Component } from 'react';
-import { View, TextInput, Text, StyleSheet, Image, TouchableOpacity, Touchable } from 'react-native';
-import { useForm } from 'react-hook-form';
+import React, { useState } from 'react';
+import { Text, StyleSheet } from 'react-native';
+import { Formik } from 'formik';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-const LoginScreen = () => {
-  const { register, handleSubmit, setValue } = useForm();
+import { View, TextInput, Logo, Button, FormErrorMessage } from '../components';
+import { Images, Colors, auth } from '../config';
+import { useTogglePasswordVisibility } from '../hooks';
+import { loginValidationSchema } from '../utils';
 
+export const LoginScreen = ({ navigation }) => {
+  const [errorState, setErrorState] = useState('');
+  const { passwordVisibility, handlePasswordVisibility, rightIcon } =
+    useTogglePasswordVisibility();
 
-  const onSubmit = useCallback(formData => {
-    console.log("data send: " + formData);
-    
-    fetch('http://localhost:5000/login/customer', {
-      method: 'POST', 
-      headers: {
-        Accept: 'application/json', 
-        'Content-Type': 'application/json'
-      }, 
-      body: JSON.stringify(formData)
-    })
-    .then(response => {
-      console.log("response: " + response);
-      if (response.status === 200) {
-        console.log("Response is 200")
-        return response.json(); 
-      }
-    })
-    .then(data=>{
-      sessionStorage.setItem("user", data);
-      navigation.navigate('Customer Screen');
-    })
-  });
-
-  const onChangeField = useCallback(
-    name => text => {
-      setValue(name, text);
-    },
-    []
-  );
-
-  useEffect(() => {
-    register('username');
-    register('password');
-  }, [register]);
-
+  const handleLogin = values => {
+    const { email, password } = values;
+    signInWithEmailAndPassword(auth, email, password).catch(error =>
+      setErrorState(error.message)
+    );
+  };
   return (
-    <View style = { styles.container }>
-
-        <View style = {styles.inputView}>
-          <TextInput 
-              style = {styles.inputText}
-              placeholder = "Username"
-              placeholderTextColor = "#003f5c"
-              onChangeText = {onChangeField('username')}
+    <>
+      <View isSafe style={styles.container}>
+        <KeyboardAwareScrollView enableOnAndroid={true}>
+          {/* LogoContainer: contains app logo and screen title */}
+          <View style={styles.logoContainer}>
+            <Logo uri={Images.logo} />
+            <Text style={styles.screenTitle}>Welcome back!</Text>
+          </View>
+          <Formik
+            initialValues={{
+              email: '',
+              password: ''
+            }}
+            validationSchema={loginValidationSchema}
+            onSubmit={values => handleLogin(values)}
+          >
+            {({
+              values,
+              touched,
+              errors,
+              handleChange,
+              handleSubmit,
+              handleBlur
+            }) => (
+              <>
+                {/* Input fields */}
+                <TextInput
+                  name='email'
+                  leftIconName='email'
+                  placeholder='Enter email'
+                  autoCapitalize='none'
+                  keyboardType='email-address'
+                  textContentType='emailAddress'
+                  autoFocus={true}
+                  value={values.email}
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                />
+                <FormErrorMessage
+                  error={errors.email}
+                  visible={touched.email}
+                />
+                <TextInput
+                  name='password'
+                  leftIconName='key-variant'
+                  placeholder='Enter password'
+                  autoCapitalize='none'
+                  autoCorrect={false}
+                  secureTextEntry={passwordVisibility}
+                  textContentType='password'
+                  rightIcon={rightIcon}
+                  handlePasswordVisibility={handlePasswordVisibility}
+                  value={values.password}
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                />
+                <FormErrorMessage
+                  error={errors.password}
+                  visible={touched.password}
+                />
+                {/* Display Screen Error Mesages */}
+                {errorState !== '' ? (
+                  <FormErrorMessage error={errorState} visible={true} />
+                ) : null}
+                {/* Login button */}
+                <Button style={styles.button} onPress={handleSubmit}>
+                  <Text style={styles.buttonText}>Login</Text>
+                </Button>
+              </>
+            )}
+          </Formik>
+          {/* Button to navigate to SignupScreen to create a new account */}
+          <Button
+            style={styles.borderlessButtonContainer}
+            borderless
+            title={'Create a new account?'}
+            onPress={() => navigation.navigate('Signup')}
           />
-        </View>
-
-        <View style = {styles.inputView}>
-          <TextInput 
-              style = {styles.inputText}
-              placeholder = "Password"
-              placeholderTextColor = "#003f5c"
-              secureTextEntry = {true}
-              onChangeText = {onChangeField('password')}
+          <Button
+            style={styles.borderlessButtonContainer}
+            borderless
+            title={'Forgot Password'}
+            onPress={() => navigation.navigate('ForgotPassword')}
           />
-        </View>
-
-        <TouchableOpacity>
-          <Text style = {styles.forgot_button}> Not a user? Register Here! </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style = {styles.loginBtn} onPress = {handleSubmit(onSubmit)}>
-            <Text style = {styles.loginText}> Login </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style = {styles.loginBtn}>
-            <Text style = {styles.loginText}> Customer Screen </Text>
-        </TouchableOpacity>
-    </View>
+        </KeyboardAwareScrollView>
+      </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "#006747",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-   
-    image: {
-      marginBottom: 40,
-    },
-   
-    inputView: {
-      backgroundColor: "#3EB489",
-      borderRadius: 30,
-      width: "80%",
-      height: 45,
-      marginBottom: 20,
-      alignItems: "center",
-    },
-   
-    inputText: {
-      height: 50,
-      flex: 1,
-      padding: 10,
-      marginLeft: 25,
-    },
-   
-    forgot_button: {
-      height: 30,
-      marginBottom: 30,
-      color: 'white', 
-    },
-   
-    loginBtn: {
-      width: "80%",
-      borderRadius: 25,
-      height: 50,
-      alignItems: "center",
-      justifyContent: "center",
-      marginTop: 40,
-      backgroundColor: "#CFC493",
-    },
-
-    loginText: {
-        color: "white", 
-        fontSize: 16
-    }
-  });
-
-export default LoginScreen
+  container: {
+    flex: 1,
+    backgroundColor: Colors.white,
+    paddingHorizontal: 12
+  },
+  logoContainer: {
+    alignItems: 'center'
+  },
+  screenTitle: {
+    fontSize: 32,
+    fontWeight: '700',
+    color: Colors.black,
+    paddingTop: 20
+  },
+  footer: {
+    backgroundColor: Colors.white,
+    paddingHorizontal: 12,
+    paddingBottom: 48,
+    alignItems: 'center'
+  },
+  footerText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: Colors.orange
+  },
+  button: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 8,
+    backgroundColor: Colors.orange,
+    padding: 10,
+    borderRadius: 8
+  },
+  buttonText: {
+    fontSize: 20,
+    color: Colors.white,
+    fontWeight: '700'
+  },
+  borderlessButtonContainer: {
+    marginTop: 16,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
+});

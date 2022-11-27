@@ -2,7 +2,7 @@ import { React, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Image, Dimensions} from "react-native";
 
 import RadioButton from './RadioButton';
-import { storage } from '../firebaseConfig';
+import { storage } from '../config/firebase';
 
 import * as firebase from 'firebase/storage';
 
