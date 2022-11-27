@@ -6,12 +6,10 @@ import { storage } from '../firebaseConfig';
 
 import * as firebase from 'firebase/storage';
 
-
-
 const windowWidth = Dimensions.get('window').width;
 
 const Card = (props) => {
-  const {  id, imageSrc, cardTitle, materialName, selected, onPress } = props;
+  const { imageSrc, materialName } = props;
   const [state, setState] = useState({
     uri: null
   })
@@ -27,31 +25,24 @@ const Card = (props) => {
 
   const { uri } = state;
   return(
-
     <View style={styles.cardContainer}>
-      {true ?
       <View style={styles.content}>
-        <Image style={styles.image} source={{uri}}></Image>
+        <View style={styles.imageContainer}><Image style={styles.image} source={{uri}} /></View>
         <View>
-          <Text style={styles.title} numberOfLines={1}>{cardTitle}</Text>
-          <Text style={styles.subtitle}>{materialName}</Text>
+          <Text style={styles.title}>{materialName}</Text>
         </View>
-        <RadioButton id={id} onPress={onPress} isChecked={selected}  />
-      </View> : 
-      null}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   cardContainer: {
-    marginTop: 10,
-    marginBottom: 10,
-    width: windowWidth * 0.9,
+    width: windowWidth,
     height: 80,
-    borderWidth: 2,
-    borderRadius: 10,
+    borderTopWidth: 2,
     borderColor: '#006600',
+    backgroundColor: '#fff'
   },
   content: {
     flex: 1,
@@ -59,19 +50,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
   },
+  imageContainer: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 1,
+    shadowRadius: 2,
+    elevation: 5,
+    overflow: 'visible',
+  },
   image: {
-    marginLeft: -10,
+    marginHorizontal: 10,
     width: 60,
     height: 60,
     borderRadius: 10,
-    borderColor:'#006600',
   },
   title: {
     width: 200,
-    fontSize: 25,
+    fontSize: 28,
     color: '#006600',
   },
-
   subtitle: {
     fontSize: 15,
     color: '#006600',

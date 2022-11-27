@@ -7,25 +7,40 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-gesture-handler'; 
 
 import UserScreen from "./screens/UserScreen";
-import MapScreen from "./screens/MapScreen";
-import MapDisplay from "./screens/Map"; 
+import MapScreen from "./screens/Map"; 
 import ListScreen from "./screens/ListScreen";
 import CameraScreen from "./screens/CameraScreen";
 import HomeScreen from "./screens/HomeScreen";
-
+import ModalWindow from "./components/ModalWindow";
+import { ItemProvider } from "./context/ItemContext";
 
 const ListStack = createStackNavigator({
 	List: ListScreen,
-	Map: MapScreen,}
-	,{
+	Map: MapScreen,
+	}, {
 		defaultNavigationOptions: {
 			headerStyle: {
-				backgroundColor: '#154C8A',
+				backgroundColor: '#006600',
 			}, 
 			headerTitleStyle: {
 				color: "#fff"
 			},
 		}
+});
+
+const CameraStack = createStackNavigator({
+	Camera: CameraScreen,
+	Map: MapScreen,
+	Modal: ModalWindow,
+}, {
+	defaultNavigationOptions: {
+		headerStyle: {
+			backgroundColor: '#006600',
+		}, 
+		headerTitleStyle: {
+			color: "#fff"
+		},
+	}
 });
 
 const TabNavigator = createBottomTabNavigator({
@@ -48,7 +63,7 @@ Home: {
 	},
 },
 Location: {
-	screen: MapDisplay,
+	screen: MapScreen,
 	navigationOptions: {
 		tabBarLabel: "Location",
 		tabBarOptions: {
@@ -66,7 +81,7 @@ Location: {
 	},
 },
 Camera: {
-	screen: CameraScreen,
+	screen: CameraStack,
 	navigationOptions: {
 		tabBarLabel: "Camera",
 		tabBarOptions: {
@@ -127,9 +142,12 @@ const Navigator = createAppContainer(TabNavigator);
 
 export default function App() {
 	return (
-		<Navigator>
-			<StatusBar style="auto"/>
-			<CameraScreen/>
-		</Navigator>
+		<ItemProvider>
+			<Navigator>
+				<StatusBar style="auto"/>
+				<CameraScreen/>
+			</Navigator>
+		</ItemProvider>
+
 	);
 }

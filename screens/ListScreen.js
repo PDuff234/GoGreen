@@ -4,38 +4,41 @@ import Constants from 'expo-constants';
 
 import CardList from '../components/CardList';
 
-import { collection, getDocs } from 'firebase/firestore';
-import { db, app } from '../firebaseConfig';
+import { collection, getDocs, query, onSnapshot  } from 'firebase/firestore';
+import { db } from '../firebaseConfig';
+
+
+const q = query(collection(db, "UserData", "TestUser", "Recyclables"));
 
 const ListScreen = ({ navigation }) => {
   const [state, setState] = useState({
     data: [],
-    isCardSelected: false,
   })
 
   useEffect ( () => {
-    async function fetchData() {
-      const querySnapshot = await getDocs(collection(db, "UserData", "TestUser", "Recyclables"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const data = [];
-      querySnapshot.forEach(async (doc) => {
-        data.push(doc.data());
-      });
-      setState({isCardSelected: false, data});
-    }
-    fetchData();
+      querySnapshot.forEach((doc) => {
+        const item = doc.data();
+        item.docid = doc.id;
+        data.push(item);
+      }); 
+      setState({data});  
+    })
+    return unsubscribe;
   }, []);
 
-  const { data, isCardSelected } = state;
-
-
-  const handleDragEnd = (data) => {
-    setState({isCardSelected,data})
-  }
-  
+  const { data } = state;
 
   return(
     <SafeAreaView style={{flex:1}}>
-			{ data ? <CardList items={data} onDragDrop={handleDragEnd} navigation={navigation} /> : null }
+			{ data ? 
+        <CardList items={data} 
+          navigation={navigation}
+          onDataChange={setState}
+        /> : 
+        null 
+      }
     </SafeAreaView>
 
   )

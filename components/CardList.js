@@ -1,51 +1,72 @@
-import { React, useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, Button, SafeAreaView} from 'react-native';
+import { React, useContext } from 'react';
+import { Animated, StyleSheet, View, TouchableOpacity, Button, Text, Pressable, FlatList} from 'react-native';
+import { RectButton, Swipeable } from 'react-native-gesture-handler';
+import { FontAwesome5 } from '@expo/vector-icons'; 
+import { collection, doc, deleteDoc, getDocs } from 'firebase/firestore';
+import { db } from '../firebaseConfig';
 
-
+import ItemContext from '../context/ItemContext';
 import Card from './Card';
-import DraggableFlatList, {ScaleDecorator} from 'react-native-draggable-flatlist';
 
-const CardList = ({ items, onDragDrop, navigation }) => {
-  const [state, setState] = useState({
-    currentSelected: null,
-  })
-  
-  const handleRadioClick = (id) => {
-    if (state.currentSelected === id) {
-      setState({
-        currentSelected: null,
-      })
-    } else {
-      setState({
-        currentSelected: id,
+const AnimatedIcon = Animated.createAnimatedComponent(FontAwesome5);
+
+const CardList = ({ items, navigation, onDataChange }) => {
+  const { setItemPrediction } = useContext(ItemContext);
+
+  const renderItem = ({item}) => {
+    const {id, material, url} = item;
+
+    const renderRightView = (progress, dragX, onDeleteHandler) => {
+      const scale = dragX.interpolate({
+        inputRange: [-80, 0],
+        outputRange: [1, 0],
+        extrapolate: 'clamp',
       });
+      return(
+        <RectButton style={styles.rightAction} onPress={onDeleteHandler}>
+          <AnimatedIcon 
+            name="trash"
+            size={30}
+            color='#fff'
+            style={styles.rightIcon}
+          />
+        </RectButton>
+      )
     }
     
-  }
-
-  const { currentSelected } = state;
-
-  const renderItem = ({item, drag, isActive}) => {
-    const {id, name, material, url} = item;
-    const isChecked = state.currentSelected === id ? true : false;
-    
 		return(
-			<ScaleDecorator >
-				<TouchableOpacity
-          activeOpacity={1}
-					onLongPress={drag}
-					disabled={isActive}
-				>
-					<Card 
+      <Swipeable
+        renderRightActions={(progress, dragX) => renderRightView(progress, dragX, async () => {
+          await deleteDoc(doc(db, "UserData", "TestUser", "Recyclables", item.docid));
+          const querySnapshot = await getDocs(collection(db, "UserData", "TestUser", "Recyclables"));
+          const data = [];
+          querySnapshot.forEach(async (doc) => {
+            const item = doc.data();
+            item.docid = doc.id;
+            data.push(item);
+          });             
+          onDataChange({
+            data
+          });
+        })}
+        friction={3}
+        rightThreshold={40}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Map");
+            setItemPrediction({
+              matid: item.searchid,
+            })
+          }}
+        >
+          <Card 
             id={id}
             imageSrc={url}
-            cardTitle={name}
             materialName={material}
-            selected={isChecked}
-            onPress={handleRadioClick}
           />
-				</TouchableOpacity>
-			</ScaleDecorator>
+        </TouchableOpacity>
+      </Swipeable>
 		);
 	};
   
@@ -54,20 +75,12 @@ const CardList = ({ items, onDragDrop, navigation }) => {
 
 	return (
 			<View style={styles.container}>
-				<DraggableFlatList
+				<FlatList
 						data={items}
             onDragEnd={({data}) => onDragDrop(data)}
 						keyExtractor={keyExtractor}
 						renderItem={renderItem}
 				/>
-        { currentSelected ?  
-          <View style={styles.mapNavigation}>
-            <Button 
-              title='Go to map' 
-              color={'#006600'}
-              onPress={() => navigation.navigate('Map')}
-            />
-          </View>: null}
 			</View>
 	);
 
@@ -75,18 +88,22 @@ const CardList = ({ items, onDragDrop, navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  mapNavigation: {
-    width: 120,
-    height: 40,
-    position: 'absolute',
-    bottom: 50,
-    borderWidth: 1,
-    borderRadius: 10,
+    flex: 0,
+    height: 'auto', 
+    borderBottomWidth: 2,
     borderColor: '#006600',
   },
+  rightAction: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: 'red',
+    flex: 1,
+    justifyContent: 'flex-end'    
+  },
+  rightIcon: {
+    width: 35,
+    marginHorizontal: 10,
+  }
 })
 
 
