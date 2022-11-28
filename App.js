@@ -149,6 +149,7 @@ const AuthStack = createStackNavigator({
 	{
 		defaultNavigationOptions: {
 			headerShown: false,
+			gestureEnabled: false,
 		}
 	}
 );
@@ -239,7 +240,8 @@ const GuideStack = createStackNavigator({
 	}},
 	{
 		defaultNavigationOptions: {
-			headerShown: false
+			headerShown: false,
+			gestureEnabled: false,
 		}
 })
 
@@ -263,7 +265,8 @@ const RootStack = createStackNavigator({
 	}},
 	{
 		defaultNavigationOptions: {
-			headerShown: false
+			headerShown: false,
+			gestureEnabled: false,
 		}
 	}
 );
