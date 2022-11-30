@@ -8,6 +8,7 @@ import UserScreen from "../screens/UserScreen";
 import MapDisplay from "../screens/Map"; 
 import ListScreen from "../screens/ListScreen";
 import CameraScreen from "../screens/CameraScreen";
+import HomeScreen from "../screens/HomeScreen2";
 import GuideScreen1 from "../screens/GuideScreen1";
 import GuideScreen2 from "../screens/GuideScreen2";
 import GuideScreen3 from "../screens/GuideScreen3";
@@ -41,7 +42,7 @@ const GuideStack = createStackNavigator({
 
 const TabNavigator = createBottomTabNavigator({
 Home: {
-	screen: HomeScreen2,
+	screen: HomeScreen,
 	navigationOptions: {
 		tabBarLabel: "Home",
 		tabBarOptions: {
