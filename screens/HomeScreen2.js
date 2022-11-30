@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { Card } from 'react-native-elements';
-import { doc, setDoc, query, collection, getDoc, updateDoc, getDocs, where, limit, orderBy, onSnapshot } from "firebase/firestore";
+import { query, collection, limit, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from '../config/firebase';
 
 import CustomStatusBar from '../components/StatusBar';
