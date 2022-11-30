@@ -4,7 +4,6 @@ import { Card } from 'react-native-elements';
 import { AuthenticatedUserContext } from '../providers';
 import * as Animatable from 'react-native-animatable';
 
-
 const HomeScreen2 = ({ }) => {
 
   let proTips = [

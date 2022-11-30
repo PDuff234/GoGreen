@@ -1,11 +1,16 @@
-import React, { useEffect, useCallback, useContext } from 'react';
-import { View, TextInput, Text, StyleSheet, TouchableOpacity, Platform, Dimensions } from 'react-native';
+import React, { useEffect, useCallback, useContext, useState } from 'react';
+import { Text, StyleSheet, TouchableOpacity, Platform, Dimensions } from 'react-native';
 import { signOut } from 'firebase/auth';
 import * as Animatable from 'react-native-animatable';
 import { Button } from 'react-native-elements';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { AuthenticatedUserContext } from '../providers';
+import { Formik } from 'formik';
+import { loginValidationSchema } from '../utils';
+import { View, TextInput, Logo, FormErrorMessage } from '../components';
+import { useTogglePasswordVisibility } from '../hooks';
+
 
 import { auth } from '../config'; 
 
@@ -16,11 +21,6 @@ const UserScreen = () => {
   }; 
 
   const { user, setUser } = useContext(AuthenticatedUserContext);
-
-
-  const [data, setData] = React.useState({
-	username: '',
-	});
 
   return (
 	<View style={styles.container}>
