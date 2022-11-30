@@ -1,21 +1,45 @@
-import * as React from 'react';
-import { Platform, ScrollView, StyleSheet, Text, View, Button } from 'react-native';
+import { useState, useEffect } from 'react';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { Card } from 'react-native-elements';
+import { doc, setDoc, query, collection, getDoc, updateDoc, getDocs, where, limit, orderBy, onSnapshot } from "firebase/firestore";
+import { db } from '../config/firebase';
 
+import CustomStatusBar from '../components/StatusBar';
+import { recycleGreen } from '../styles/constants';
 
-const HomeScreen = ({ }) => {
+const HomeScreen = () => {
+  const [ topPlayers, setPlayers ] = useState([]);
+  useEffect(() => {
+    const userRef = collection(db, "UserData");
+    const q = query(userRef, orderBy("score"), limit(5));
+
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const players = []
+      querySnapshot.forEach((doc) => {
+        const { email, score } = doc.data();
+        const name = email.split("@")[0];
+        players.push({
+          name,
+          score
+        });
+      });
+      setPlayers(players);
+    });
+    
+    return unsubscribe;
+  }, []);
 
   let proTips = [
-    'Reclying Fact #1: 70% of corrugated cardboard is recovered for recycling',
-    'Reclying Fact #2: Food scraps make up almost 12% of municipal solid waste generated in the U.S.',
-    'Reclying Fact #3: One ton of recycled cardboard saves 46 gallons of oil',
-    'Reclying Fact #4: 2.5 million plastic bottles are thrown away every hour in America',
+    'Reclying Fact #1: Always clean out items before recycling!',
+    'Reclying Fact #2: Do not crush cans before recycling them',
+    'Reclying Fact #3: If unsure about whether something is recyclable, its better to throw it out!',
+    'Reclying Fact #4: Remember! Recycling is just one of the R\'s its better to Reduce and Reuse!',
     'Reclying Fact #5: Glass is 100% recyclable and can be recycled endlessly without loss in quality or purity',
-    'Reclying Fact #6: 70% of the total waste in offices is paper waste',
+    'Reclying Fact #6: Just because there is a recycling symbol on it does not mean it can be recycled curbside',
     'Reclying Fact #7: Aluminum can be recycled forever without any loss of quality',
-    'Reclying Fact #8: The average person generates 4.4 pounds of solid waste every day',
-    'Reclying Fact #9: You will produce about 127 to 604 pounds of garbage in your lifetime.',
-    'Reclying Fact #10: Americans throw away enough trash in an average year to circle the earth 24 times.']
+    'Reclying Fact #8: Plastic recycling is cumbersome. Considering replacing plastics or reusing where you can!',
+    'Reclying Fact #9: Still unsure whether something can be recycled? Check out Earth911 and iRecycle!',
+    'Reclying Fact #10: Bottle caps do not have to be removed before recycling water bottles']
 
   const randoNum = () => {
     return Math.floor((Math.random() * 10));
@@ -25,56 +49,44 @@ const HomeScreen = ({ }) => {
 
   const randomProTip = proTips[num];
 
-  const Players = [
-    { name: "Josh", score: 10 },
-    { name: "Robert", score: 30 },
-    { name: "Ryan", score: 5 },
-    { name: "Marissa", score: 6 },
-    { name: "Jennifer", score: 21 }
-  ];
-
-  const sortedArray = Players.sort((a, b) => b.score - a.score);
-
-
+  const sortedArray = topPlayers.sort((a, b) => b.score - a.score);
   return (
-    <View style={styles.container}>
-      <View style={styles.topBarInfoContainer}>
-        <Text style={{ textAlign: 'center', marginTop: 60, color: 'white', fontSize: 19, fontWeight: '700' }}>
-          Go Green!
-        </Text>
-      </View>
-      <View>
-        <Text style={styles.textWithShadow}>
-          Hello Human,
-        </Text>
-        <Text style={{ marginTop: 5, marginRight: 70, marginBottom: 30, color: 'black', fontSize: 28, fontWeight: '500' }}>
-          Glad to have you back!
-        </Text>
-      </View>
-      <Card style={{ width: '18rem' }}>
-        <Card.Title style={{ fontSize: 35, color: 'green', fontWeight: 'bold', marginLeft: 50, marginRight: 50 }}> Top Chart</Card.Title>
+    <>
+      <CustomStatusBar />
+      <View style={styles.container}>
+      <Card>
+        <Card.Title style = {{fontSize: 20, fontWeight: 'bold'}}>Go Green!</Card.Title>
         <Card.Divider />
-        {sortedArray.map((sorA) => {
-          return (
-            <View>
-              <Text style={{ fontSize: 25, fontWeight: '600', textAlign: 'center' }}>
-                {sorA.name}
-              </Text>
-              <Text style={{ fontSize: 17, fontWeight: '400', textAlign: 'center' }}>
-                {sorA.score} points
-              </Text>
-            </View>
-          )
-        }
-        )}
-      </Card>
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>
-          {randomProTip}
+        <Text style={{ fontSize: 16 }}>
+          Just snap a photo of any item and we'll let you know if and where it
+          can be recycled near you!
         </Text>
+      </Card>
+        <Card style={{ width: '18rem' }}>
+          <Card.Title style={{ fontSize: 20, color: recycleGreen, fontWeight: 'bold', marginLeft: 50, marginRight: 50 }}> Top Chart</Card.Title>
+          <Card.Divider />
+          {sortedArray.map((sorA) => {
+            return (
+              <View key={sorA.name}>
+                <Text style={{ fontSize: 18, fontWeight: '600', textAlign: 'center' }}>
+                  {sorA.name}
+                </Text>
+                <Text style={{ fontSize: 16, fontWeight: '400', textAlign: 'center' }}>
+                  {sorA.score} points
+                </Text>
+              </View>
+            )
+          }
+          )}
+        </Card>
+        <View style={styles.tabBarInfoContainer}>
+          <Text style={styles.tabBarInfoText}>
+            {randomProTip}
+          </Text>
+        </View>
       </View>
-    </View>
-    
+    </>
+
   );
 };
 
