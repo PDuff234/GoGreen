@@ -56,7 +56,7 @@ export const determineModalState = (label) => {
       {
         modalProp: {
           buttonTitle: "Snap another picture",
-          text: "This is trash and should not be recycled",
+          text: "This is possibly trash or needs special disposal. Please snap a picture of something else",
           icon: "trash",
           screen: "Camera",
         }

@@ -4,7 +4,7 @@ import { Camera } from "expo-camera";
 import * as ImagePicker from 'expo-image-picker';
 import { db, storage } from "../config/firebase";
 import { ref, uploadBytesResumable } from "firebase/storage";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, query, collection, getDoc, updateDoc } from "firebase/firestore";
 import * as ImageManipulator from "expo-image-manipulator";
 
 import ModalWindow from "./ModalWindow";
@@ -72,6 +72,23 @@ export default function CameraSnap({ onSnap, navigation }) {
           url: `gs://${storageRef.bucket}/${storageRef.fullPath}`,
           searchid: itemPredictionRef.current.matid,
         });
+      }
+      
+      if (itemPredictionRef.current.label && itemPredictionRef.current.label !== "Trash"){
+        const userRef = doc(db, "UserData", `${user.uid}`);
+        const snap = await getDoc(userRef)
+        const { score } = snap.data()
+
+
+        if (score){
+          await updateDoc(userRef, {
+            score: score + 1
+          });
+        } else{
+          await updateDoc(userRef, {
+            score: 1
+          });
+        }
       }
       
       const { modalProp } = determineModalState(itemPredictionRef.current.label);
