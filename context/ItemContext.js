@@ -1,10 +1,8 @@
-import { createContext, useState } from "react";
+import { createContext } from "react";
 import { getFunctions, httpsCallable } from "firebase/functions";
-import * as Location from 'expo-location';
 
 import { useStateWithRef } from "../functions/customHooks";
 import { determineMatId } from "../functions/helperFunctions";
-import { earth911ApiKey } from "../ApiKey";
 
 const ItemContext = createContext(); 
 
@@ -28,7 +26,6 @@ export function ItemProvider({ children }){
     });
   }
 
-  console.log("Context");
   return(
     <ItemContext.Provider 
       value={{ 
