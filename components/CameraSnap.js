@@ -9,6 +9,7 @@ import * as ImageManipulator from "expo-image-manipulator";
 
 import ModalWindow from "./ModalWindow";
 import ItemContext from "../context/ItemContext";
+import { AuthenticatedUserContext } from "../providers/AuthenticatedUserProvider";
 import { determineUserLabel, determineModalState } from "../functions/helperFunctions";
 import { recycleGreen } from "../styles/constants";
 
@@ -21,8 +22,8 @@ export default function CameraSnap({ onSnap, navigation }) {
     modal: false,
   });
   const [type, setType] = useState(Camera.Constants.Type.back);
-
   const { itemPredictionRef, setItemPrediction, getPrediction } = useContext(ItemContext);
+  const { user } = useContext(AuthenticatedUserContext);
 
   let camera = Camera;
 
@@ -65,7 +66,7 @@ export default function CameraSnap({ onSnap, navigation }) {
       await getPrediction(filename);
 
       if (itemPredictionRef.current.matid){
-        await setDoc(doc(db, "UserData", "TestUser", "Recyclables", filename), {
+        await setDoc(doc(db, "UserData", `${user.uid}`, "Recyclables", filename), {
           id: filename,
           material: determineUserLabel(itemPredictionRef.current.matid),
           url: `gs://${storageRef.bucket}/${storageRef.fullPath}`,

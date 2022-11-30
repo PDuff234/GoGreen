@@ -1,11 +1,12 @@
 import { useState, useEffect, useContext } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { Marker } from 'react-native-maps';
 import * as Linking from 'expo-linking';
 
 import { GOOGLE_MAPS_GEOENCODE_ENDPOINT } from "@env";
 import { googleMapsApiKey, earth911ApiKey } from '../ApiKey';
 
+import { AuthenticatedUserContext } from '../providers/AuthenticatedUserProvider';
 import ItemContext from '../context/ItemContext';
 
 const searchParams = {
@@ -16,9 +17,14 @@ const searchParams = {
 const Results = ({ lat, lng }) => {
   const [markers, setMarkers] = useState(null);
   const { itemPredictionRef } = useContext(ItemContext);
+  const { user } = useContext(AuthenticatedUserContext);
 
   useEffect(() => {
     const getLocations = async (latitude, longitude) => {
+      if (!itemPredictionRef?.current?.matid) {
+        return
+      }
+      
       const response = await fetch(`https://api.earth911.com/earth911.searchLocations?api_key=${earth911ApiKey}&latitude=${latitude}&longitude=${longitude}&max_distance=${searchParams.maxDistance}&max_results=${searchParams.maxResults}&material_id=${itemPredictionRef?.current?.matid}`, {
         method: "GET",
         header: {
@@ -27,7 +33,7 @@ const Results = ({ lat, lng }) => {
       });
   
       const parsed = await response.json();
-  
+      
       if (parsed.error){
         return;
       }
@@ -35,6 +41,10 @@ const Results = ({ lat, lng }) => {
     }
     getLocations(lat, lng);
   }, [itemPredictionRef?.current?.matid, lat, lng])
+
+  useEffect(() => {
+    setMarkers(null);
+  }, [user?.uid])
 
   const handlePress = async (event) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;

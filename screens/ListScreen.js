@@ -1,19 +1,21 @@
-import { React, useState, useEffect} from 'react';
-import { StyleSheet, SafeAreaView, Platform, Button, View, Image, Text} from "react-native";
+import { React, useState, useEffect, useContext } from 'react';
+import { StyleSheet, SafeAreaView, Platform } from "react-native";
 import Constants from 'expo-constants';
 
 import CardList from '../components/CardList';
 
-import { collection, getDocs, query, onSnapshot  } from 'firebase/firestore';
-import { db, app } from '../config/firebase';
+import { AuthenticatedUserContext } from '../providers/AuthenticatedUserProvider';
+import { collection, query, onSnapshot  } from 'firebase/firestore';
+import { db } from '../config/firebase';
 
-
-const q = query(collection(db, "UserData", "TestUser", "Recyclables"));
 
 const ListScreen = ({ navigation }) => {
   const [state, setState] = useState({
     data: [],
   })
+
+  const { user } = useContext(AuthenticatedUserContext);
+  const q = query(collection(db, "UserData", `${user.uid}`, "Recyclables"));
 
   useEffect ( () => {
     const unsubscribe = onSnapshot(q, (querySnapshot) => {

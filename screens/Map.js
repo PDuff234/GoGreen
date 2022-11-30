@@ -1,9 +1,8 @@
-import React, {useEffect, useState, useContext} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, ActivityIndicator, StyleSheet} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import * as Location from 'expo-location';
 
-import ItemContext from '../context/ItemContext';
 import { recycleGreen } from '../styles/constants';
 import Results from '../components/Results';
 
@@ -41,9 +40,8 @@ const MapDisplay = () => {
     );
   }
 
- const updateUserLocation = async () => {
-  let location = await Location.getCurrentPositionAsync({});
-  let { latitude, longitude } = location.coords;
+ const updateUserLocation = (loc) => {
+  let { latitude, longitude } = loc;
 
   setLocation({
     latitude,
@@ -51,7 +49,7 @@ const MapDisplay = () => {
   })
  }
 
-  return (
+ return (
     <View style={styles.mapContainer}>
       { location ? 
         <MapView
@@ -65,7 +63,7 @@ const MapDisplay = () => {
           }}
           showsUserLocation={true}
           showsMyLocationButton={true}
-          onUserLocationChange={updateUserLocation}
+          onUserLocationChange={(e) => updateUserLocation(e.nativeEvent.coordinate)}
         >
           <Results 
             lat={location.latitude} 
