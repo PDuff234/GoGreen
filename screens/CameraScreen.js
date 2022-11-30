@@ -3,6 +3,7 @@ import { ActivityIndicator, FlatList, Text, View, Image, SafeAreaView, ScrollVie
 
 //import CameraUpload from "../components/CameraUpload"
 import CameraSnap from "../components/CameraSnap";
+import CustomStatusBar from "../components/StatusBar";
 
 const CameraScreen = ({ navigation }) => {
   const [state, setState] = useState({
@@ -10,9 +11,13 @@ const CameraScreen = ({ navigation }) => {
   });
 
 return (
+  <>
+    <CustomStatusBar />
     <View style={{ flex: 1 }}>
       <CameraSnap onSnap={setState} navigation={navigation}></CameraSnap>
-    </View>
+    </View>    
+  </>
+
   );
 };
 

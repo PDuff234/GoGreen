@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { Platform, ScrollView, StyleSheet, Text, View, } from 'react-native';
+import { Platform, StyleSheet, Text, View, } from 'react-native';
 import { Card } from 'react-native-elements'; 
+
+import CustomStatusBar from '../components/StatusBar';
 
 const HomeScreen = () => {
 
@@ -21,25 +23,28 @@ const HomeScreen = () => {
       }
       
       let num = randoNum();
-      
       const randomProTip = proTips[num];
   
   return (
-    <View style={styles.container}>
-      <Card>
-        <Card.Title style = {{fontSize: 20, fontWeight: 'bold'}}>Go Green!</Card.Title>
-        <Card.Divider />
-        <Text style={{ fontSize: 15 }}>
-          Just snap a photo of any item and we'll let you know if and where it
-          can be recycled near you!
-        </Text>
-      </Card>
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>
-          {randomProTip}
-        </Text>
+    <>
+      <CustomStatusBar />
+      <View style={styles.container}>
+        <Card>
+          <Card.Title style = {{fontSize: 20, fontWeight: 'bold'}}>Go Green!</Card.Title>
+          <Card.Divider />
+          <Text style={{ fontSize: 15 }}>
+            Just snap a photo of any item and we'll let you know if and where it
+            can be recycled near you!
+          </Text>
+        </Card>
+        <View style={styles.tabBarInfoContainer}>
+          <Text style={styles.tabBarInfoText}>
+            {randomProTip}
+          </Text>
+        </View>
       </View>
-    </View>
+    </>
+
     );
   };
   

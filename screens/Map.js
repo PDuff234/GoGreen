@@ -4,6 +4,7 @@ import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import * as Location from 'expo-location';
 
 import { recycleGreen } from '../styles/constants';
+import CustomStatusBar from '../components/StatusBar';
 import Results from '../components/Results';
 
 const MapDisplay = () => {
@@ -50,6 +51,8 @@ const MapDisplay = () => {
  }
 
  return (
+  <>
+    <CustomStatusBar />
     <View style={styles.mapContainer}>
       { location ? 
         <MapView
@@ -73,6 +76,8 @@ const MapDisplay = () => {
         <ActivityIndicator size="large" color={recycleGreen}/>  
       }
     </View>
+  </>
+
   );
 }
 
