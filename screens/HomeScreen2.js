@@ -3,14 +3,12 @@ import { Platform, StyleSheet, Text, View, Dimensions } from 'react-native';
 import { Card } from 'react-native-elements';
 import * as Animatable from 'react-native-animatable';
 import { query, collection, limit, orderBy, onSnapshot } from "firebase/firestore";
-
-const HomeScreen2 = ({ }) => {
 import { db } from '../config/firebase';
 import { AuthenticatedUserContext } from '../providers';
 import CustomStatusBar from '../components/StatusBar';
 import { recycleGreen } from '../styles/constants';
 
-const HomeScreen = () => {
+const HomeScreen2 = ({ }) => {
   const [ topPlayers, setPlayers ] = useState([]);
   const { user, setUser } = useContext(AuthenticatedUserContext);
 
@@ -57,15 +55,15 @@ const HomeScreen = () => {
   const sortedArray = topPlayers.sort((a, b) => b.score - a.score);
   return (
     <>
-      <CustomStatusBar />
+      {/* <CustomStatusBar /> */}
       <View style={styles.container}>
         <View style={styles.topBarInfoContainer}>
           <Animatable.Image 
-            animation="bounceIn"
-            duraton="1500"
-            source={require('../assets/goGreen-Logo.png')}
-            style={styles.logo}
-            resizeMode="contain"
+          animation="bounceIn"
+          duraton="1500"
+          source={require('../assets/goGreen-Logo.png')}
+          style={styles.logo}
+          resizeMode="center"
           />
         </View>
         <View style={{marginTop: 100}}>
@@ -105,7 +103,7 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default HomeScreen2;
 
 const {height} = Dimensions.get("screen");
 const height_logo = height * 0.1;
@@ -186,9 +184,10 @@ const styles = StyleSheet.create({
   topBarInfoContainer: {
     position: 'absolute',
     top: 0,
-    height: 80,
+    height: 100,
     left: 0,
     right: 0,
+    paddingTop: 10, 
     ...Platform.select({
       ios: {
         shadowColor: 'black',

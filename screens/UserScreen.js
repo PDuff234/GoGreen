@@ -40,15 +40,18 @@ const UserScreen = () => {
 			</Animatable.View>
 		</View>
 
-		<View >
-				<Text style={ styles.textWithShadow }>
-				Hello {user.email.split("@")[0]}
-				</Text>
+		<View>
+			<Text style={ styles.textWithShadow }>
+				Welcome {user.email.split("@")[0]}
+			</Text>
 		</View>
 
-		<TouchableOpacity style={styles.button} onPress={handleLogout}>
-			<Text style={styles.buttonText}>Log Out</Text>
-		</TouchableOpacity>
+		<View style={ styles.logout }>
+			<TouchableOpacity style={styles.button} onPress={handleLogout}>
+				<Text style={styles.buttonText}>Log Out</Text>
+			</TouchableOpacity>
+		</View>
+
 	</View>
 	); 
 }; 
@@ -66,6 +69,11 @@ const styles = StyleSheet.create({
 		padding: 0,
 		alignItems: 'center',
 	  },
+	logout: {
+		justifyContent: 'center', 
+		alignItems: 'center', 
+		marginTop: 150
+	}, 
 	header: {
 			flex: 1,
 			alignItems: "center",
@@ -84,7 +92,7 @@ const styles = StyleSheet.create({
 	fontWeight: '500',
 	color: '#FFD700',
 	textShadowColor: 'rgba(0, 80, 0, 0.9)',
-	marginTop: 300,
+	marginTop: 150,
 	fontSize: 35,
 	textShadowOffset: { width: -2, height: 2 },
 	textShadowRadius: 5
