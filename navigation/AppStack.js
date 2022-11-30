@@ -42,7 +42,7 @@ const GuideStack = createStackNavigator({
 
 const TabNavigator = createBottomTabNavigator({
 Home: {
-	screen: HomeScreen2,
+	screen: HomeScreen,
 	navigationOptions: {
 		tabBarLabel: "Home",
 		tabBarOptions: {
