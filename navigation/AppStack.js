@@ -9,6 +9,9 @@ import MapDisplay from "../screens/Map";
 import ListScreen from "../screens/ListScreen";
 import CameraScreen from "../screens/CameraScreen";
 import HomeScreen from "../screens/HomeScreen";
+import GuideScreen1 from "../screens/GuideScreen1";
+import GuideScreen2 from "../screens/GuideScreen2";
+import GuideScreen3 from "../screens/GuideScreen3";
 
 const ListStack = createStackNavigator({
 	List: ListScreen,
@@ -18,6 +21,23 @@ const ListStack = createStackNavigator({
 			headerShown: null,
 		}
 });
+
+const GuideStack = createStackNavigator({
+	Guide1: {
+		screen: GuideScreen1
+	},
+	Guide2: {
+		screen: GuideScreen2
+	},
+	Guide3: {
+		screen: GuideScreen3
+	}},
+	{
+		defaultNavigationOptions: {
+			headerShown: false,
+			gestureEnabled: false,
+		}
+})
 
 const TabNavigator = createBottomTabNavigator({
 Home: {
@@ -114,7 +134,22 @@ Profile: {
 },
 });
 
-const Navigator = createAppContainer(TabNavigator);
+const RootStack = createStackNavigator({
+	GuideNavigator: {
+			screen: GuideStack,
+	},
+	TabNavigator: {
+		screen: TabNavigator
+	}},
+	{
+		defaultNavigationOptions: {
+			headerShown: false,
+			gestureEnabled: false,
+		}
+	}
+);
+
+const Navigator = createAppContainer(RootStack);
 
 export const AppStack = () => {
   return (
