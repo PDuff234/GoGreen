@@ -1,19 +1,18 @@
-import { useState, useEffect } from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
-import { Card } from 'react-native-elements';
-import { query, collection, limit, orderBy, onSnapshot } from "firebase/firestore";
-import { db } from '../config/firebase';
 import React, { useState, useContext, useEffect } from 'react';
-import { Platform, ScrollView, StyleSheet, Text, View, Button, Dimensions } from 'react-native';
+import { Platform, StyleSheet, Text, View, Dimensions } from 'react-native';
 import { Card } from 'react-native-elements';
-import { AuthenticatedUserContext } from '../providers';
 import * as Animatable from 'react-native-animatable';
+import { query, collection, limit, orderBy, onSnapshot } from "firebase/firestore";
 
+import { db } from '../config/firebase';
+import { AuthenticatedUserContext } from '../providers';
 import CustomStatusBar from '../components/StatusBar';
 import { recycleGreen } from '../styles/constants';
 
 const HomeScreen = () => {
   const [ topPlayers, setPlayers ] = useState([]);
+  const { user, setUser } = useContext(AuthenticatedUserContext);
+
   useEffect(() => {
     const userRef = collection(db, "UserData");
     const q = query(userRef, orderBy("score"), limit(5));
@@ -59,82 +58,42 @@ const HomeScreen = () => {
     <>
       <CustomStatusBar />
       <View style={styles.container}>
-      <Card>
-        <Card.Title style = {{fontSize: 20, fontWeight: 'bold'}}>Go Green!</Card.Title>
-        <Card.Divider />
-        <Text style={{ fontSize: 16 }}>
-          Just snap a photo of any item and we'll let you know if and where it
-          can be recycled near you!
-  const { user, setUser } = useContext(AuthenticatedUserContext);
-
-  const Players = [
-    { name: "Josh", score: 10 },
-    { name: "Robert", score: 30 },
-    { name: "Ryan", score: 5 },
-    { name: "Marissa", score: 6 },
-    { name: "Jennifer", score: 21 }
-  ];
-
-  const sortedArray = Players.sort((a, b) => b.score - a.score);
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.topBarInfoContainer}>
-        <Animatable.Image 
-          animation="bounceIn"
-          duraton="1500"
-          source={require('../assets/goGreen-Logo.png')}
-          style={styles.logo}
-          resizeMode="contain"
-        />
-      </View>
-        <View>
-          <Text style={styles.textWithShadow}>
-            Hello {user.username},
-          </Text>
-          <Text style={{ marginTop: 5, marginRight: 70, marginBottom: 5, color: 'black', fontSize: 28, fontWeight: '500' }}>
-            Glad to have you back!
-          </Text>
+        <View style={styles.topBarInfoContainer}>
+          <Animatable.Image 
+            animation="bounceIn"
+            duraton="1500"
+            source={require('../assets/goGreen-Logo.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
         </View>
-        <Card style={{ width: '18rem' }}>
-          <Card.Title style={{ fontSize: 35, color: 'green', fontWeight: 'bold', marginLeft: 50, marginRight: 50 }}> Top Chart</Card.Title>
-          <Card.Divider />
-          {sortedArray.map((sorA) => {
-            return (
-              <View>
-                <Text style={{ fontSize: 25, fontWeight: '600', textAlign: 'center' }}>
-                  {sorA.name}
-                </Text>
-                <Text style={{ fontSize: 17, fontWeight: '400', textAlign: 'center' }}>
-                  {sorA.score} points
-                </Text>
-              </View>
-            )
-          }
-          )}
-        </Card>
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>
-          {randomProTip}
-        </Text>
-      </Card>
-        <Card style={{ width: '18rem' }}>
-          <Card.Title style={{ fontSize: 20, color: recycleGreen, fontWeight: 'bold', marginLeft: 50, marginRight: 50 }}> Top Chart</Card.Title>
-          <Card.Divider />
-          {sortedArray.map((sorA) => {
-            return (
-              <View key={sorA.name}>
-                <Text style={{ fontSize: 18, fontWeight: '600', textAlign: 'center' }}>
-                  {sorA.name}
-                </Text>
-                <Text style={{ fontSize: 16, fontWeight: '400', textAlign: 'center' }}>
-                  {sorA.score} points
-                </Text>
-              </View>
-            )
-          }
-          )}
-        </Card>
+        <View style={{marginTop: 100}}>
+          <Card>
+            <Card.Title style = {{fontSize: 20, fontWeight: 'bold'}}>Hello {user.email.split("@")[0]}!</Card.Title>
+            <Card.Divider />
+            <Text style={{ fontSize: 15 }}>
+              Just snap a photo of a item and we'll let you know if and where it
+              can be recycled near you!
+            </Text>
+          </Card>
+          <Card style={{ width: '18rem' }}>
+            <Card.Title style={{ fontSize: 20, color: recycleGreen, fontWeight: 'bold', marginLeft: 50, marginRight: 50 }}> Top Chart</Card.Title>
+            <Card.Divider />
+            {sortedArray.map((sorA) => {
+              return (
+                <View key={sorA.name}>
+                  <Text style={{ fontSize: 18, fontWeight: '600', textAlign: 'center' }}>
+                    {sorA.name}
+                  </Text>
+                  <Text style={{ fontSize: 16, fontWeight: '400', textAlign: 'center' }}>
+                    {sorA.score} points
+                  </Text>
+                </View>
+              )
+            }
+            )}
+          </Card>
+        </View>
         <View style={styles.tabBarInfoContainer}>
           <Text style={styles.tabBarInfoText}>
             {randomProTip}
@@ -142,14 +101,13 @@ const HomeScreen = () => {
         </View>
       </View>
     </>
-
   );
 };
 
-export default HomeScreen2;
+export default HomeScreen;
 
 const {height} = Dimensions.get("screen");
-const height_logo = height * 0.15;
+const height_logo = height * 0.1;
 
 const styles = StyleSheet.create({
   container: {
@@ -192,7 +150,7 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0, 80, 0, 0.9)',
     marginTop: 110,
     marginRight: 70,
-    fontSize: 35,
+    fontSize: 24,
     textShadowOffset: { width: -2, height: 2 },
     textShadowRadius: 5
   },
@@ -227,7 +185,7 @@ const styles = StyleSheet.create({
   topBarInfoContainer: {
     position: 'absolute',
     top: 0,
-    height: 100,
+    height: 80,
     left: 0,
     right: 0,
     ...Platform.select({
@@ -243,7 +201,6 @@ const styles = StyleSheet.create({
     }),
     alignItems: 'center',
     backgroundColor: '#006600',
-    paddingVertical: 10,
   },
   tabBarInfoText: {
     fontSize: 12,
