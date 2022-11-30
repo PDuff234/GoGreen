@@ -6,12 +6,14 @@ import { collection, doc, deleteDoc, getDocs } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
 import ItemContext from '../context/ItemContext';
+import { AuthenticatedUserContext } from '../providers/AuthenticatedUserProvider';
 import Card from './Card';
 
 const AnimatedIcon = Animated.createAnimatedComponent(FontAwesome5);
 
 const CardList = ({ items, navigation, onDataChange }) => {
   const { setItemPrediction } = useContext(ItemContext);
+  const { user } = useContext(AuthenticatedUserContext);
 
   const renderItem = ({item}) => {
     const {id, material, url} = item;
@@ -37,8 +39,8 @@ const CardList = ({ items, navigation, onDataChange }) => {
 		return(
       <Swipeable
         renderRightActions={(progress, dragX) => renderRightView(progress, dragX, async () => {
-          await deleteDoc(doc(db, "UserData", "TestUser", "Recyclables", item.docid));
-          const querySnapshot = await getDocs(collection(db, "UserData", "TestUser", "Recyclables"));
+          await deleteDoc(doc(db, "UserData", `${user.uid}`, "Recyclables", item.docid));
+          const querySnapshot = await getDocs(collection(db, "UserData", `${user.uid}`, "Recyclables"));
           const data = [];
           querySnapshot.forEach(async (doc) => {
             const item = doc.data();
