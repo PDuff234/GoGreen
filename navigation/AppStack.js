@@ -15,12 +15,7 @@ const ListStack = createStackNavigator({
 	Map: MapDisplay,}
 	,{
 		defaultNavigationOptions: {
-			headerStyle: {
-				backgroundColor: '#006600',
-			}, 
-			headerTitleStyle: {
-				color: "#fff"
-			},
+			headerShown: null,
 		}
 });
 

@@ -8,11 +8,11 @@ import { ItemProvider } from "./context/ItemContext";
 export default function App() {
 	return (
 		<AuthenticatedUserProvider>
-				<SafeAreaProvider>
-						<ItemProvider>
-							<RootNavigator />
-						</ItemProvider>
-				</SafeAreaProvider>
+			<SafeAreaProvider>
+				<ItemProvider>
+					<RootNavigator />
+				</ItemProvider>
+			</SafeAreaProvider>
 			</AuthenticatedUserProvider>
 	);
 }

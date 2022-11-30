@@ -2,6 +2,7 @@ import { React, useState, useEffect, useContext } from 'react';
 import { StyleSheet, SafeAreaView, Platform } from "react-native";
 import Constants from 'expo-constants';
 
+import CustomStatusBar from '../components/StatusBar';
 import CardList from '../components/CardList';
 
 import { AuthenticatedUserContext } from '../providers/AuthenticatedUserProvider';
@@ -33,15 +34,19 @@ const ListScreen = ({ navigation }) => {
   const { data } = state;
 
   return(
-    <SafeAreaView style={{flex:1}}>
-			{ data ? 
-        <CardList items={data} 
-          navigation={navigation}
-          onDataChange={setState}
-        /> : 
-        null 
-      }
-    </SafeAreaView>
+    <>
+      <CustomStatusBar />
+      <SafeAreaView style={{flex:1}}>
+        { data ? 
+          <CardList items={data} 
+            navigation={navigation}
+            onDataChange={setState}
+          /> : 
+          null 
+        }
+      </SafeAreaView>
+    </>
+ 
 
   )
 }
