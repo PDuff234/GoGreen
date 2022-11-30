@@ -4,6 +4,7 @@ import { Card } from 'react-native-elements';
 import * as Animatable from 'react-native-animatable';
 import { query, collection, limit, orderBy, onSnapshot } from "firebase/firestore";
 
+const HomeScreen2 = ({ }) => {
 import { db } from '../config/firebase';
 import { AuthenticatedUserContext } from '../providers';
 import CustomStatusBar from '../components/StatusBar';
@@ -32,7 +33,7 @@ const HomeScreen = () => {
     
     return unsubscribe;
   }, []);
-
+  
   let proTips = [
     'Reclying Fact #1: Always clean out items before recycling!',
     'Reclying Fact #2: Do not crush cans before recycling them',
