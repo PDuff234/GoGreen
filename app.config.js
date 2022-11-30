@@ -8,11 +8,11 @@ export default {
     platforms: ['ios', 'android'],
     version: '0.15.0',
     orientation: 'portrait',
-    icon: './assets/green.png',
+    icon: './assets/goGreen-Logo.png',
     splash: {
       image: './assets/splash.png',
       resizeMode: 'cover',
-      backgroundColor: '#F57C00'
+      backgroundColor: '#006600'
     },
     updates: {
       fallbackToCacheTimeout: 0

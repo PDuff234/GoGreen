@@ -8,7 +8,7 @@ import { LoginScreen, SignupScreen, ForgotPasswordScreen } from '../screens';
 const Auth = createStackNavigator({
 	Login: LoginScreen,
 	Signup: SignupScreen,
-  ForgotPassword: ForgotPasswordScreen, }
+  	ForgotPassword: ForgotPasswordScreen, }
 	,{
 		defaultNavigationOptions: {
 			headerStyle: {
