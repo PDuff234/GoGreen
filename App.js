@@ -13,6 +13,6 @@ export default function App() {
 					<RootNavigator />
 				</ItemProvider>
 			</SafeAreaProvider>
-			</AuthenticatedUserProvider>
+		</AuthenticatedUserProvider>
 	);
 }
