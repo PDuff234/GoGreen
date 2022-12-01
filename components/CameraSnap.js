@@ -52,10 +52,18 @@ export default function CameraSnap({ onSnap, navigation }) {
         [{resize: {width: 1024, height: 1024}}],
         { compress: 0.8, format: 'jpeg' }
       ); 
+      console.log(typeof(photo.uri)); 
       const response = await fetch(manipulateResult.uri);
       const blob = await response.blob();
+
+      //Syntax for Android is not up to ES-2022 standards and is missing the .at() operator
+      //Below is the syntax which works for iOS but not for Android
+      //      const filename = photo.uri.split("/").at(-1);
   
-      const filename = photo.uri.split("/").at(-1);
+      const temp = photo.uri.split("/");
+      const filename = temp[temp.length - 1].toString(); 
+      console.log(filename); 
+      console.log(typeof(filename)); 
       const storageRef = ref(storage, `temp/${filename}`);
       setLoading(true);
       await uploadBytesResumable(storageRef, blob).catch((error) => {
