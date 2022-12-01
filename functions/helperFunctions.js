@@ -10,7 +10,7 @@ export const determineUserLabel = (id) => {
       return "Paper cup";
     case 333:
       return "CFL";
-    case 482:
+    case 481:
       return "Cable";
     case 97: 
       return "Coat hanger";

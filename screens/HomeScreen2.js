@@ -33,16 +33,16 @@ const HomeScreen2 = ({ }) => {
   }, []);
   
   let proTips = [
-    'Reclying Fact #1: Always clean out items before recycling!',
-    'Reclying Fact #2: Do not crush cans before recycling them',
-    'Reclying Fact #3: If unsure about whether something is recyclable, its better to throw it out!',
-    'Reclying Fact #4: Remember! Recycling is just one of the R\'s its better to Reduce and Reuse!',
-    'Reclying Fact #5: Glass is 100% recyclable and can be recycled endlessly without loss in quality or purity',
-    'Reclying Fact #6: Just because there is a recycling symbol on it does not mean it can be recycled curbside',
-    'Reclying Fact #7: Aluminum can be recycled forever without any loss of quality',
-    'Reclying Fact #8: Plastic recycling is cumbersome. Considering replacing plastics or reusing where you can!',
-    'Reclying Fact #9: Still unsure whether something can be recycled? Check out Earth911 and iRecycle!',
-    'Reclying Fact #10: Bottle caps do not have to be removed before recycling water bottles']
+    'Recycling Fact #1: Always clean out items before recycling!',
+    'Recycling Fact #2: Do not crush cans before recycling them',
+    'Recycling Fact #3: If unsure about whether something is recyclable, its better to throw it out!',
+    'Recycling Fact #4: Remember! Recycling is just one of the R\'s its better to Reduce and Reuse!',
+    'Recycling Fact #5: Glass is 100% recyclable and can be recycled endlessly without loss in quality or purity',
+    'Recycling Fact #6: Just because there is a recycling symbol on it does not mean it can be recycled curbside',
+    'Recycling Fact #7: Aluminum can be recycled forever without any loss of quality',
+    'Recycling Fact #8: Plastic recycling is cumbersome. Considering replacing plastics or reusing where you can!',
+    'Recycling Fact #9: Still unsure whether something can be recycled? Check out Earth911 and iRecycle!',
+    'Recycling Fact #10: Bottle caps do not have to be removed before recycling water bottles']
 
   const randoNum = () => {
     return Math.floor((Math.random() * 10));
