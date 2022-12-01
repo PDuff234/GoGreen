@@ -14,7 +14,7 @@ const HomeScreen2 = ({ }) => {
 
   useEffect(() => {
     const userRef = collection(db, "UserData");
-    const q = query(userRef, orderBy("score"), limit(5));
+    const q = query(userRef, orderBy("score", "desc"), limit(5));
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const players = []
