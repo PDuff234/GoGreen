@@ -73,7 +73,9 @@ export const determineModalState = (label) => {
         icon: "recycle",
         screen: "Camera",
       };
-      if (loc_mat.at(-1) === "plastic"){
+      //Again, Android is not up to ES-2022 standards, so below is the syntax for the if statement for iOS
+      //if (loc_mat.at(-1) === "plastic")
+      if (loc_mat[loc_mat.length - 1] === "plastic"){
         modalProp.text = "This plastic can be recycled at your curbside but consider reusing or reducing instead!";
       } else{
         modalProp.text = "This item can be recycled at your curbside or any recycling bin!";
