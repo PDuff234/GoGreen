@@ -58,4 +58,10 @@ yarn start
 
 # Final Touches
 
+To test this application on your phone, you will have to go to your platforms app store and download [Expo Go](https://expo.dev/client)
+
+Once you have Expo Go on your phone, you will have to have your phone and laptop/PC connected to the same internet source for the project to compile
+
+Once you have the application and you are connected to the same internet, you scan the QR code generated in the terminal using your phones camera to run the application!
+
 To kill either terminal at any time, press Ctrl+C to kill the program
