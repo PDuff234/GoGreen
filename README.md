@@ -75,6 +75,16 @@ export {earth911ApiKey, googleMapsApiKey};
 
 You will have to change the contents of the file with your API keys, and then you will be able to run the application
 
+## Functions Folder
+
+The functions folder includes functions that we had to create to deploy to firebase to Create Users and create our Prediction Endpoint
+
+This folder is here for reference and *should not* be included in the Go Green Project Folder as it will cause compilation errors
+
+**Please keep the Functions Folder separate from the Go Green Project Folder**
+
+## Compilation and Execution
+
 To test this application on your phone, you will have to go to your platforms app store and download [Expo Go](https://expo.dev/client)
 
 Once you have Expo Go on your phone, you will have to have your phone and laptop/PC connected to the same internet source for the project to compile
