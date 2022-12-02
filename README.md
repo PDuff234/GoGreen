@@ -58,6 +58,23 @@ yarn start
 
 # Final Touches
 
+***This application also requires API keys to run the project which we will not provide***
+
+To acquire those API keys, you will have to navigate to [Earth911](https://api.earth911.com/) and [Google Maps](https://developers.google.com/maps/documentation/javascript/get-api-key) to acquire API keys
+
+Once you have those API keys, you will create a new file named `ApiKey.js` and place it in the Go Green Project Folder
+
+ApiKey.js should be formatted as shown below: 
+
+```
+const earth911ApiKey = "earth911APIKey"; 
+const googleMapsApiKey = "googleMapsAPIKey"; 
+
+export {earth911ApiKey, googleMapsApiKey}; 
+```
+
+You will have to change the contents of the file with your API keys, and then you will be able to run the application
+
 To test this application on your phone, you will have to go to your platforms app store and download [Expo Go](https://expo.dev/client)
 
 Once you have Expo Go on your phone, you will have to have your phone and laptop/PC connected to the same internet source for the project to compile
